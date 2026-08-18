@@ -2,2307 +2,1308 @@
 <html lang="es">
 
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Control de Asistencia - IE MGP</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-  <!-- Lector QR -->
-  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <title>
+    Asistencia IE Manuel Gonzales Prada
+  </title>
+
 
   <style>
 
     :root {
-      --azul: #123b68;
-      --celeste: #4da3d9;
-      --azul-claro: #eaf4fb;
-      --blanco: #ffffff;
-      --gris: #64748b;
+      --azul: #0f2f55;
+      --azul2: #2563eb;
+      --celeste: #38bdf8;
       --verde: #059669;
       --rojo: #dc2626;
-      --amarillo: #d97706;
+      --gris: #64748b;
       --fondo: #f1f5f9;
-      --borde: #dbe3ec;
+      --blanco: #ffffff;
+      --borde: #cbd5e1;
     }
+
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
+
 
     body {
-      margin: 0;
+
       font-family: Arial, sans-serif;
+
       background: var(--fondo);
+
       color: #1e293b;
+
+      padding: 20px 12px;
+
     }
+
 
     .contenedor {
+
       width: 100%;
+
       max-width: 520px;
-      margin: 0 auto;
-      padding: 15px;
+
+      margin: auto;
+
     }
+
+
+    /* =====================================================
+       ENCABEZADO
+       ===================================================== */
 
     .encabezado {
-      background: linear-gradient(135deg, var(--azul), #1d5d91);
+
+      background: var(--azul);
+
       color: white;
+
+      padding: 22px 18px;
+
+      border-radius: 12px 12px 0 0;
+
       text-align: center;
-      padding: 25px 15px;
-      border-radius: 0 0 18px 18px;
-      margin-bottom: 18px;
+
     }
+
 
     .encabezado h1 {
-      margin: 0;
-      font-size: 22px;
+
+      font-size: 21px;
+
+      line-height: 1.3;
+
     }
+
 
     .encabezado p {
-      margin: 8px 0 0;
-      font-size: 14px;
+
+      margin-top: 7px;
+
+      font-size: 13px;
+
       opacity: .9;
+
     }
 
-    .card {
+
+    /* =====================================================
+       TARJETAS
+       ===================================================== */
+
+    .tarjeta {
+
       background: var(--blanco);
-      border-radius: 14px;
+
       padding: 20px;
+
       margin-bottom: 15px;
-      box-shadow: 0 4px 14px rgba(0,0,0,.07);
+
+      border-radius: 12px;
+
+      box-shadow:
+        0 3px 12px rgba(0,0,0,.08);
+
     }
 
-    .card h2 {
-      margin-top: 0;
+
+    .tarjeta h2 {
+
+      color: var(--azul);
+
       font-size: 19px;
-      color: var(--azul);
-      text-align: center;
+
+      margin-bottom: 8px;
+
     }
 
-    .boton {
-      width: 100%;
-      border: none;
-      border-radius: 9px;
-      padding: 14px;
-      margin-top: 10px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
 
-    .boton-principal {
-      background: var(--azul);
-      color: white;
-    }
+    .descripcion {
 
-    .boton-principal:hover {
-      background: #0d2f53;
-    }
+      color: var(--gris);
 
-    .boton-secundario {
-      background: var(--celeste);
-      color: white;
-    }
-
-    .boton-verde {
-      background: var(--verde);
-      color: white;
-    }
-
-    .boton-rojo {
-      background: var(--rojo);
-      color: white;
-    }
-
-    .boton-gris {
-      background: var(--gris);
-      color: white;
-    }
-
-    .boton:disabled {
-      opacity: .6;
-      cursor: not-allowed;
-    }
-
-    .campo {
-      margin-bottom: 12px;
-    }
-
-    .campo label {
-      display: block;
       font-size: 13px;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
 
-    .campo input,
-    .campo select {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid var(--borde);
-      border-radius: 8px;
-      font-size: 15px;
-      outline: none;
-    }
+      line-height: 1.5;
 
-    .campo input:focus,
-    .campo select:focus {
-      border-color: var(--celeste);
-    }
-
-    .tabs {
-      display: flex;
-      gap: 8px;
       margin-bottom: 15px;
+
     }
 
-    .tab {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background: #e2e8f0;
-      color: #334155;
-      font-weight: bold;
-      cursor: pointer;
-    }
 
-    .tab.activo {
-      background: var(--azul);
-      color: white;
-    }
+    /* =====================================================
+       FORMULARIOS
+       ===================================================== */
 
-    #reader-container {
-      background: #000;
-      border-radius: 10px;
-      overflow: hidden;
-      min-height: 280px;
-      margin-top: 10px;
-    }
+    label {
 
-    #reader {
-      width: 100%;
-    }
-
-    #reader video {
-      width: 100% !important;
-      border-radius: 8px;
-    }
-
-    .estado-camara {
-      margin-top: 10px;
-      padding: 12px;
-      border-radius: 8px;
-      text-align: center;
-      font-size: 14px;
-      background: #e2e8f0;
-      color: #334155;
-    }
-
-    #resultado-box {
-      display: none;
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 10px;
-      text-align: left;
-    }
-
-    #resultado-box.ok {
       display: block;
-      background: #dcfce7;
-      border: 1px solid #86efac;
-      color: #166534;
-    }
 
-    #resultado-box.error {
-      display: block;
-      background: #fee2e2;
-      border: 1px solid #fca5a5;
-      color: #991b1b;
-    }
-
-    #resultado-box.warn {
-      display: block;
-      background: #fef3c7;
-      border: 1px solid #fde68a;
-      color: #92400e;
-    }
-
-    #manual-container {
-      display: none;
-      background: #f8fafc;
-      border: 1px dashed #cbd5e1;
-      padding: 12px;
-      border-radius: 9px;
-      margin-top: 10px;
-    }
-
-    .vista {
-      display: none;
-    }
-
-    .vista.activa {
-      display: block;
-    }
-
-    .login-box {
-      max-width: 400px;
-      margin: 30px auto;
-    }
-
-    .mensaje-login {
-      display: none;
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 7px;
-      background: #fee2e2;
-      color: #991b1b;
-      text-align: center;
-      font-size: 14px;
-    }
-
-    .modulo {
-      border: 1px solid var(--borde);
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 12px;
-      background: white;
-    }
-
-    .modulo h3 {
-      margin: 0 0 5px;
-      color: var(--azul);
-    }
-
-    .modulo p {
-      margin: 0;
       font-size: 13px;
-      color: #64748b;
+
+      font-weight: bold;
+
+      margin-bottom: 5px;
+
     }
+
+
+    input {
+
+      width: 100%;
+
+      padding: 12px;
+
+      border: 1px solid var(--borde);
+
+      border-radius: 7px;
+
+      font-size: 16px;
+
+      outline: none;
+
+    }
+
+
+    input:focus {
+
+      border-color: var(--celeste);
+
+    }
+
+
+    .grupo {
+
+      margin-bottom: 14px;
+
+    }
+
+
+    /* =====================================================
+       BOTONES
+       ===================================================== */
+
+    button {
+
+      width: 100%;
+
+      padding: 12px;
+
+      border: none;
+
+      border-radius: 7px;
+
+      font-size: 15px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+      margin-top: 8px;
+
+    }
+
+
+    .btn-consultar {
+
+      background: var(--azul);
+
+      color: white;
+
+    }
+
+
+    .btn-consultar:hover {
+
+      background: #174a7c;
+
+    }
+
+
+    .btn-registro {
+
+      background: var(--verde);
+
+      color: white;
+
+    }
+
+
+    .btn-volver {
+
+      background: var(--gris);
+
+      color: white;
+
+    }
+
+
+    /* =====================================================
+       LOGIN
+       ===================================================== */
+
+    #login-view {
+
+      display: none;
+
+    }
+
+
+    .login-error {
+
+      display: none;
+
+      margin-top: 12px;
+
+      padding: 10px;
+
+      border-radius: 7px;
+
+      background: #fee2e2;
+
+      border: 1px solid #fca5a5;
+
+      color: #991b1b;
+
+      font-size: 13px;
+
+      text-align: center;
+
+    }
+
+
+    /* =====================================================
+       RESULTADOS
+       ===================================================== */
+
+    #resultado {
+
+      margin-top: 18px;
+
+    }
+
+
+    .mensaje {
+
+      padding: 13px;
+
+      border-radius: 7px;
+
+      font-size: 14px;
+
+      line-height: 1.5;
+
+    }
+
+
+    .mensaje.info {
+
+      background: #e0f2fe;
+
+      border: 1px solid #7dd3fc;
+
+      color: #075985;
+
+    }
+
+
+    .mensaje.error {
+
+      background: #fee2e2;
+
+      border: 1px solid #fca5a5;
+
+      color: #991b1b;
+
+    }
+
+
+    .mensaje.exito {
+
+      background: #dcfce7;
+
+      border: 1px solid #86efac;
+
+      color: #166534;
+
+    }
+
+
+    /* =====================================================
+       REGISTROS
+       ===================================================== */
+
+    .registro {
+
+      background: #f8fafc;
+
+      border: 1px solid var(--borde);
+
+      border-radius: 8px;
+
+      padding: 13px;
+
+      margin-top: 10px;
+
+      text-align: left;
+
+    }
+
+
+    .registro-fecha {
+
+      color: var(--azul);
+
+      font-size: 14px;
+
+      font-weight: bold;
+
+      margin-bottom: 8px;
+
+    }
+
+
+    .dato {
+
+      font-size: 13px;
+
+      margin: 5px 0;
+
+    }
+
+
+    .dato strong {
+
+      color: #334155;
+
+    }
+
+
+    .estado {
+
+      display: inline-block;
+
+      padding: 4px 8px;
+
+      border-radius: 20px;
+
+      font-size: 11px;
+
+      font-weight: bold;
+
+      margin-top: 5px;
+
+    }
+
+
+    .estado.ingreso {
+
+      background: #dcfce7;
+
+      color: #166534;
+
+    }
+
+
+    .estado.salida {
+
+      background: #fee2e2;
+
+      color: #991b1b;
+
+    }
+
+
+    .puntual {
+
+      color: #15803d;
+
+      font-weight: bold;
+
+    }
+
+
+    .tarde {
+
+      color: #b45309;
+
+      font-weight: bold;
+
+    }
+
 
     .pie {
+
       text-align: center;
-      padding: 20px;
-      color: #64748b;
-      font-size: 12px;
+
+      color: var(--gris);
+
+      font-size: 11px;
+
+      margin-top: 15px;
+
     }
 
-    .oculto {
-      display: none !important;
-    }
 
   </style>
+
 </head>
 
 
 <body>
 
-<!-- =====================================================
-     ENCABEZADO
-===================================================== -->
-
-<div class="encabezado">
-
-  <h1>IE JEC "MANUEL GONZALES PRADA"</h1>
-
-  <p>Portal Institucional de Control de Asistencia</p>
-
-</div>
-
 
 <div class="contenedor">
 
 
-<!-- =====================================================
-     VISTA 1 — PORTAL PÚBLICO
-===================================================== -->
+  <!-- ===================================================
+       ENCABEZADO
+       =================================================== -->
 
-<section id="vista-portal" class="vista activa">
+  <div class="encabezado">
 
-  <div class="card">
-
-    <h2>Portal Institucional</h2>
-
-    <p style="text-align:center;color:#64748b;">
-      Seleccione el módulo al que desea acceder.
-    </p>
-
-  </div>
-
-
-  <!-- REGISTRAR ASISTENCIA -->
-
-  <div class="modulo">
-
-    <h3>📋 Registrar Asistencia</h3>
+    <h1>
+      IE JEC MANUEL GONZALES PRADA
+    </h1>
 
     <p>
-      Registro de ingreso y salida mediante código QR o DNI.
-    </p>
-
-    <button
-      class="boton boton-principal"
-      onclick="solicitarAcceso('asistencia')">
-
-      🔐 Acceder a Registrar Asistencia
-
-    </button>
-
-  </div>
-
-
-  <!-- CONSULTAR ASISTENCIA -->
-
-  <div class="modulo">
-
-    <h3>📊 Consultar Asistencia</h3>
-
-    <p>
-      Consulta y revisión de registros de asistencia.
-    </p>
-
-    <button
-      class="boton boton-secundario"
-      onclick="solicitarAcceso('consulta')">
-
-      🔐 Acceder a Consulta de Asistencia
-
-    </button>
-
-  </div>
-
-
-  <!-- FUTUROS MÓDULOS -->
-
-  <div class="modulo">
-
-    <h3>🔧 Otros módulos</h3>
-
-    <p>
-      Próximamente se incorporarán nuevas funciones institucionales.
+      Portal de Asistencia
     </p>
 
   </div>
 
-</section>
+
+  <!-- ===================================================
+       VISTA PÚBLICA
+       =================================================== -->
+
+  <div id="public-view">
 
 
+    <!-- CONSULTA -->
 
-<!-- =====================================================
-     VISTA 2 — LOGIN
-===================================================== -->
+    <div class="tarjeta">
 
-<section id="vista-login" class="vista">
+      <h2>
+        🔎 Consultar asistencia
+      </h2>
 
-  <div class="card login-box">
+      <div class="descripcion">
 
-    <h2>🔐 Acceso restringido</h2>
+        Consulte los registros de asistencia
+        ingresando únicamente el número de DNI.
 
-    <p style="text-align:center;color:#64748b;">
-      Ingrese sus credenciales para continuar.
-    </p>
+      </div>
 
 
-    <div class="campo">
+      <div class="grupo">
+
+        <label for="dni-consulta">
+          DNI / Código
+        </label>
+
+        <input
+          id="dni-consulta"
+          type="text"
+          inputmode="numeric"
+          maxlength="20"
+          placeholder="Ingrese DNI"
+          onkeydown="
+            if(event.key==='Enter')
+              consultarDNI();
+          "
+        >
+
+      </div>
+
+
+      <button
+        class="btn-consultar"
+        onclick="consultarDNI()"
+      >
+        🔎 BUSCAR REGISTRO
+      </button>
+
+
+      <div id="resultado"></div>
+
+    </div>
+
+
+    <!-- ACCESO REGISTRO -->
+
+    <div class="tarjeta">
+
+      <h2>
+        🔐 Registrar asistencia
+      </h2>
+
+      <div class="descripcion">
+
+        Acceso restringido para el personal
+        autorizado para registrar asistencia.
+
+      </div>
+
+
+      <button
+        class="btn-registro"
+        onclick="mostrarLogin()"
+      >
+        INGRESAR AL REGISTRO
+      </button>
+
+    </div>
+
+
+  </div>
+
+
+  <!-- ===================================================
+       LOGIN
+       =================================================== -->
+
+  <div
+    id="login-view"
+    class="tarjeta"
+  >
+
+    <h2>
+      🔐 Acceso al registro
+    </h2>
+
+
+    <div class="descripcion">
+
+      Ingrese el usuario y contraseña
+      autorizados.
+
+    </div>
+
+
+    <div class="grupo">
 
       <label for="usuario">
         Usuario
       </label>
 
       <input
-        type="text"
         id="usuario"
+        type="text"
+        autocomplete="username"
         placeholder="Ingrese usuario"
-        autocomplete="username">
+      >
 
     </div>
 
 
-    <div class="campo">
+    <div class="grupo">
 
       <label for="password">
         Contraseña
       </label>
 
       <input
-        type="password"
         id="password"
+        type="password"
+        autocomplete="current-password"
         placeholder="Ingrese contraseña"
-        autocomplete="current-password">
+        onkeydown="
+          if(event.key==='Enter')
+            iniciarSesion();
+        "
+      >
 
     </div>
 
 
     <button
-      id="btn-login"
-      class="boton boton-principal"
-      onclick="iniciarSesion()">
-
+      class="btn-registro"
+      onclick="iniciarSesion()"
+    >
       INGRESAR
+    </button>
 
+
+    <button
+      class="btn-volver"
+      onclick="volverInicio()"
+    >
+      ← VOLVER
     </button>
 
 
     <div
       id="login-error"
-      class="mensaje-login">
+      class="login-error"
+    ></div>
 
-      Usuario o contraseña incorrectos.
-
-    </div>
-
-
-    <button
-      class="boton boton-gris"
-      onclick="volverPortal()">
-
-      VOLVER AL PORTAL
-
-    </button>
-
-  </div>
-
-</section>
-
-
-
-<!-- =====================================================
-     VISTA 3 — REGISTRO DE ASISTENCIA
-===================================================== -->
-
-<section id="vista-asistencia" class="vista">
-
-  <div class="card">
-
-    <h2>📋 Registro de Asistencia</h2>
-
-
-    <!-- TIPO DE PERSONA -->
-
-    <div class="tabs">
-
-      <button
-        id="tab-est"
-        class="tab activo"
-        onclick="setTipo('estudiante')">
-
-        👨‍🎓 Estudiantes
-
-      </button>
-
-
-      <button
-        id="tab-per"
-        class="tab"
-        onclick="setTipo('personal')">
-
-        👨‍🏫 Personal
-
-      </button>
-
-    </div>
-
-
-    <!-- ESTADO -->
-
-    <div class="campo">
-
-      <label for="estado">
-        Tipo de registro
-      </label>
-
-      <select id="estado">
-
-        <option value="INGRESO">
-          INGRESO
-        </option>
-
-        <option value="SALIDA">
-          SALIDA
-        </option>
-
-      </select>
-
-    </div>
-
-
-    <!-- CÁMARA -->
-
-    <div id="reader-container">
-
-      <div id="reader"></div>
-
-    </div>
-
-
-    <button
-      id="btn-camara"
-      class="boton boton-principal"
-      onclick="activarCamara()">
-
-      📷 ACTIVAR CÁMARA
-
-    </button>
-
-
-    <div
-      id="estado-camara"
-      class="estado-camara">
-
-      Cámara detenida.
-
-    </div>
-
-
-    <!-- RESULTADO -->
-
-    <div id="resultado-box"></div>
-
-
-    <!-- REGISTRO MANUAL -->
-
-    <button
-      class="boton boton-secundario"
-      onclick="toggleManual()">
-
-      🪪 Registrar por DNI
-
-    </button>
-
-
-    <div id="manual-container">
-
-      <div class="campo">
-
-        <label for="dni-manual">
-          DNI / Código
-        </label>
-
-        <input
-          type="text"
-          id="dni-manual"
-          placeholder="Ingrese DNI">
-
-      </div>
-
-
-      <button
-        class="boton boton-verde"
-        onclick="enviarManual()">
-
-        REGISTRAR DNI
-
-      </button>
-
-    </div>
-
-
-    <button
-      class="boton boton-rojo"
-      onclick="cerrarAsistencia()">
-
-      CERRAR SESIÓN
-
-    </button>
-
-  </div>
-
-</section>
-
-
-
-<!-- =====================================================
-     VISTA 4 — CONSULTA DE ASISTENCIA
-===================================================== -->
-
-<section id="vista-consulta" class="vista">
-
-  <div class="card">
-
-    <h2>📊 Consulta de Asistencia</h2>
-
-    <p style="text-align:center;color:#64748b;margin-bottom:18px;">
-      Busque y consulte los registros de asistencia.
-    </p>
-
-
-    <!-- TIPO -->
-
-    <div class="campo">
-
-      <label>Tipo de persona</label>
-
-      <select id="consulta-tipo">
-
-        <option value="todos">
-          Todos
-        </option>
-
-        <option value="estudiante">
-          Estudiantes
-        </option>
-
-        <option value="personal">
-          Personal
-        </option>
-
-      </select>
-
-    </div>
-
-
-    <!-- FECHA -->
-
-    <div class="campo">
-
-      <label>Fecha</label>
-
-      <input
-        type="date"
-        id="consulta-fecha">
-
-    </div>
-
-
-    <!-- DNI -->
-
-    <div class="campo">
-
-      <label>DNI / Código</label>
-
-      <input
-        type="text"
-        id="consulta-dni"
-        placeholder="DNI o código">
-
-    </div>
-
-
-    <!-- NOMBRE -->
-
-    <div class="campo">
-
-      <label>Apellidos y Nombres</label>
-
-      <input
-        type="text"
-        id="consulta-nombre"
-        placeholder="Buscar por nombre">
-
-    </div>
-
-
-    <!-- GRADO -->
-
-    <div
-      class="campo"
-      id="consulta-grado-contenedor">
-
-      <label>Grado / Sección</label>
-
-      <input
-        type="text"
-        id="consulta-grado"
-        placeholder="Ejemplo: 3° A">
-
-    </div>
-
-
-    <!-- ESTADO -->
-
-    <div class="campo">
-
-      <label>Estado</label>
-
-      <select id="consulta-estado">
-
-        <option value="todos">
-          Todos
-        </option>
-
-        <option value="INGRESO">
-          INGRESO
-        </option>
-
-        <option value="SALIDA">
-          SALIDA
-        </option>
-
-      </select>
-
-    </div>
-
-
-    <!-- PUNTUALIDAD -->
-
-    <div class="campo">
-
-      <label>Puntualidad</label>
-
-      <select id="consulta-puntualidad">
-
-        <option value="todos">
-          Todos
-        </option>
-
-        <option value="PUNTUAL">
-          PUNTUAL
-        </option>
-
-        <option value="TARDE">
-          TARDE
-        </option>
-
-        <option value="N/A">
-          N/A
-        </option>
-
-      </select>
-
-    </div>
-
-
-    <!-- BOTÓN BUSCAR -->
-
-    <button
-      id="btn-consultar"
-      class="boton boton-principal"
-      onclick="consultarAsistencia()">
-
-      🔎 BUSCAR REGISTROS
-
-    </button>
-
-
-    <!-- RESULTADO RESUMEN -->
-
-    <div
-      id="consulta-resumen"
-      style="
-      display:none;
-      margin-top:15px;
-      padding:12px;
-      border-radius:8px;
-      background:#eaf4fb;
-      color:#123b68;
-      text-align:center;
-      font-weight:bold;">
-
-    </div>
 
   </div>
 
 
-  <!-- =================================================
-       RESULTADOS
-  ================================================== -->
+  <div class="pie">
 
-  <div
-    class="card"
-    id="consulta-resultados"
-    style="display:none;">
-
-    <h2>Resultados</h2>
-
-    <div id="tabla-resultados"></div>
+    Sistema de asistencia institucional
 
   </div>
 
-
-  <div class="card">
-
-    <button
-      class="boton boton-gris"
-      onclick="volverPortal()">
-
-      VOLVER AL PORTAL
-
-    </button>
-
-  </div>
-
-</section>
 
 </div>
-
-
-<div class="pie">
-
-  IE JEC "MANUEL GONZALES PRADA" · Control de Asistencia
-
-</div>
-
 
 
 <script>
 
-/* =====================================================
-   CONFIGURACIÓN
-===================================================== */
 
-const WEB_APP_URL =
-'https://script.google.com/macros/s/AKfycbwgLFPzerWoMaT1AdJSHFWZStxKKeg-QNbtnEz9ENuSM8j91j_X-uqyUMTZVqQKJDY/exec'
+  /* =====================================================
+     CONFIGURACIÓN DEL SERVIDOR
+     ===================================================== */
 
-
-let tipoActual = 'estudiante';
-
-let moduloSolicitado = '';
-
-let lectorQR = null;
-
-let camaraActiva = false;
-
-let escaneando = false;
+  const WEB_APP_URL =
+    'https://script.google.com/macros/s/AKfycbwgLFPzerWoMaT1AdJSHFWZStxKKeg-QNbtnEz9ENuSM8j91j_X-uqyUMTZVqQKJDY/exec';
 
 
-
-/* =====================================================
-   CAMBIO DE VISTAS
-===================================================== */
-
-function cambiarVista(id) {
-
-  document
-    .querySelectorAll('.vista')
-    .forEach(function(v) {
-
-      v.classList.remove('activa');
-
-    });
+  let jsonpScript = null;
 
 
-  const destino =
-    document.getElementById(id);
+  /* =====================================================
+     MOSTRAR LOGIN
+     ===================================================== */
+
+  function mostrarLogin() {
+
+    document
+      .getElementById('public-view')
+      .style.display = 'none';
 
 
-  if (destino) {
-
-    destino.classList.add('activa');
-
-  }
-
-}
+    document
+      .getElementById('login-view')
+      .style.display = 'block';
 
 
-
-/* =====================================================
-   ACCESO A MÓDULOS
-===================================================== */
-
-function solicitarAcceso(modulo) {
-
-  moduloSolicitado = modulo;
-
-  document.getElementById('usuario').value = '';
-
-  document.getElementById('password').value = '';
-
-  document.getElementById('login-error').style.display = 'none';
-
-  cambiarVista('vista-login');
-
-}
-
-
-
-/* =====================================================
-   VOLVER AL PORTAL
-===================================================== */
-
-function volverPortal() {
-
-  detenerCamara();
-
-  cambiarVista('vista-portal');
-
-}
-
-
-
-/* =====================================================
-   LOGIN
-===================================================== */
-
-function iniciarSesion() {
-
-  const usuario =
     document
       .getElementById('usuario')
-      .value
-      .trim();
+      .focus();
+
+  }
 
 
-  const password =
+  /* =====================================================
+     VOLVER AL PORTAL
+     ===================================================== */
+
+  function volverInicio() {
+
+    document
+      .getElementById('login-view')
+      .style.display = 'none';
+
+
+    document
+      .getElementById('public-view')
+      .style.display = 'block';
+
+
+    document
+      .getElementById('usuario')
+      .value = '';
+
+
     document
       .getElementById('password')
-      .value
-      .trim();
+      .value = '';
 
 
-  const error =
-    document.getElementById('login-error');
-
-
-  const boton =
-    document.getElementById('btn-login');
-
-
-  if (!usuario || !password) {
-
-    error.innerHTML =
-      'Ingrese usuario y contraseña.';
-
-    error.style.display = 'block';
-
-    return;
-
-  }
-
-
-  boton.disabled = true;
-
-  boton.innerText = 'VERIFICANDO...';
-
-  error.style.display = 'none';
-
-
-  cargarJSONP(
-
-    'apiLogin',
-
-    {
-      user: usuario,
-      pass: password
-    },
-
-    function(res) {
-
-      boton.disabled = false;
-
-      boton.innerText = 'INGRESAR';
-
-
-      if (res && res.ok) {
-
-        if (moduloSolicitado === 'asistencia') {
-
-          cambiarVista('vista-asistencia');
-
-        }
-
-        else if (moduloSolicitado === 'consulta') {
-
-          cambiarVista('vista-consulta');
-
-        }
-
-      }
-
-      else {
-
-        error.innerHTML =
-          'Usuario o contraseña incorrectos.';
-
-        error.style.display = 'block';
-
-      }
-
-    }
-
-  );
-
-}
-
-
-
-/* =====================================================
-   JSONP
-===================================================== */
-
-function cargarJSONP(action, parametros, callback) {
-
-  const nombreCallback =
-    'callback_' +
-    Date.now() +
-    '_' +
-    Math.floor(Math.random() * 100000);
-
-
-  window[nombreCallback] = function(respuesta) {
-
-    try {
-
-      callback(respuesta);
-
-    }
-
-    finally {
-
-      delete window[nombreCallback];
-
-      if (script.parentNode) {
-
-        script.parentNode.removeChild(script);
-
-      }
-
-    }
-
-  };
-
-
-  let url =
-    WEB_APP_URL +
-    '?action=' +
-    encodeURIComponent(action);
-
-
-  Object.keys(parametros || {}).forEach(function(clave) {
-
-    url +=
-      '&' +
-      encodeURIComponent(clave) +
-      '=' +
-      encodeURIComponent(parametros[clave]);
-
-  });
-
-
-  url +=
-    '&callback=' +
-    encodeURIComponent(nombreCallback);
-
-
-  const script =
-    document.createElement('script');
-
-
-  script.src = url;
-
-  script.id =
-    'jsonp_' + nombreCallback;
-
-
-  script.onerror = function() {
-
-    delete window[nombreCallback];
-
-    callback({
-      ok: false,
-      exito: false,
-      mensaje:
-        'No se pudo conectar con el servidor.'
-    });
-
-    if (script.parentNode) {
-
-      script.parentNode.removeChild(script);
-
-    }
-
-  };
-
-
-  document.body.appendChild(script);
-
-}
-
-
-
-/* =====================================================
-   TIPO DE PERSONA
-===================================================== */
-
-function setTipo(tipo) {
-
-  tipoActual = tipo;
-
-
-  document
-    .getElementById('tab-est')
-    .classList.toggle(
-      'activo',
-      tipo === 'estudiante'
-    );
-
-
-  document
-    .getElementById('tab-per')
-    .classList.toggle(
-      'activo',
-      tipo === 'personal'
-    );
-
-}
-
-
-
-/* =====================================================
-   ACTIVAR CÁMARA
-   ESTA ES LA SOLUCIÓN QUE YA FUNCIONÓ
-===================================================== */
-
-async function activarCamara() {
-
-  const estado =
-    document.getElementById(
-      'estado-camara'
-    );
-
-
-  const boton =
-    document.getElementById(
-      'btn-camara'
-    );
-
-
-  boton.disabled = true;
-
-  boton.innerText =
-    'INICIANDO CÁMARA...';
-
-
-  estado.style.background =
-    '#fef3c7';
-
-  estado.style.color =
-    '#92400e';
-
-  estado.innerHTML =
-    '📷 Detectando cámara...';
-
-
-  try {
-
-    if (!window.isSecureContext) {
-
-      throw new Error(
-        'La página no está utilizando HTTPS.'
-      );
-
-    }
-
-
-    if (
-      !navigator.mediaDevices ||
-      !navigator.mediaDevices.getUserMedia
-    ) {
-
-      throw new Error(
-        'Este navegador no permite acceder a la cámara.'
-      );
-
-    }
-
-
-    /*
-     * Obtener permiso real de cámara.
-     */
-
-    const stream =
-      await navigator.mediaDevices.getUserMedia({
-
-        video: true,
-
-        audio: false
-
-      });
-
-
-    /*
-     * Liberar temporalmente la cámara.
-     */
-
-    stream
-      .getTracks()
-      .forEach(function(track) {
-
-        track.stop();
-
-      });
-
-
-    /*
-     * Detectar cámaras.
-     */
-
-    const dispositivos =
-      await Html5Qrcode.getCameras();
-
-
-    if (
-      !dispositivos ||
-      dispositivos.length === 0
-    ) {
-
-      throw new Error(
-        'El navegador no detectó ninguna cámara.'
-      );
-
-    }
-
-
-    console.log(
-      'Cámaras detectadas:',
-      dispositivos
-    );
-
-
-    let camaraSeleccionada =
-      dispositivos[0];
-
-
-    /*
-     * Buscar cámara trasera.
-     */
-
-    for (
-      let i = 0;
-      i < dispositivos.length;
-      i++
-    ) {
-
-      const nombre =
-        String(
-          dispositivos[i].label || ''
-        ).toLowerCase();
-
-
-      if (
-        nombre.includes('back') ||
-        nombre.includes('rear') ||
-        nombre.includes('trasera') ||
-        nombre.includes('environment')
-      ) {
-
-        camaraSeleccionada =
-          dispositivos[i];
-
-        break;
-
-      }
-
-    }
-
-
-    estado.style.background =
-      '#dcfce7';
-
-    estado.style.color =
-      '#166534';
-
-    estado.innerHTML =
-      '🟢 Cámara detectada. Iniciando lector QR...';
-
-
-    boton.innerText =
-      '🟢 CÁMARA ACTIVA';
-
-
-    iniciarLectorConCamara(
-      camaraSeleccionada.id
-    );
-
-  }
-
-  catch(error) {
-
-    console.error(
-      'Error al acceder a la cámara:',
-      error
-    );
-
-
-    camaraActiva = false;
-
-    boton.disabled = false;
-
-    boton.innerText =
-      '📷 ACTIVAR CÁMARA';
-
-
-    estado.style.background =
-      '#fee2e2';
-
-    estado.style.color =
-      '#991b1b';
-
-
-    if (
-      error.name ===
-      'NotAllowedError'
-    ) {
-
-      estado.innerHTML =
-        '🚫 <strong>CÁMARA BLOQUEADA.</strong><br>' +
-        'Chrome no permitió utilizar la cámara.';
-
-    }
-
-    else if (
-      error.name ===
-      'NotFoundError'
-    ) {
-
-      estado.innerHTML =
-        '❌ No se encontró ninguna cámara.';
-
-    }
-
-    else if (
-      error.name ===
-      'NotReadableError'
-    ) {
-
-      estado.innerHTML =
-        '⚠️ La cámara está siendo utilizada por otra aplicación.';
-
-    }
-
-    else {
-
-      estado.innerHTML =
-        '❌ <strong>Error de cámara:</strong><br>' +
-        escapeHTML(
-          error.message ||
-          error.name ||
-          'Error desconocido'
-        );
-
-    }
-
-  }
-
-}
-
-
-
-/* =====================================================
-   INICIAR LECTOR QR
-===================================================== */
-
-function iniciarLectorConCamara(camaraId) {
-
-  if (lectorQR) {
-
-    return;
-
-  }
-
-
-  document.getElementById(
-    'reader'
-  ).innerHTML = '';
-
-
-  lectorQR =
-    new Html5Qrcode('reader');
-
-
-  const configuracion = {
-
-    fps: 10,
-
-    qrbox: {
-      width: 230,
-      height: 230
-    },
-
-    aspectRatio: 1.0
-
-  };
-
-
-  lectorQR.start(
-
-    camaraId,
-
-    configuracion,
-
-    function(texto) {
-
-      procesarRegistro(texto);
-
-    },
-
-    function() {
-
-      /*
-       * Errores normales de lectura QR
-       * se ignoran.
-       */
-
-    }
-
-  )
-
-  .then(function() {
-
-    camaraActiva = true;
-
-
-    const estado =
-      document.getElementById(
-        'estado-camara'
-      );
-
-
-    estado.style.background =
-      '#dcfce7';
-
-    estado.style.color =
-      '#166534';
-
-    estado.innerHTML =
-      '🟢 <strong>LECTOR ACTIVO.</strong><br>' +
-      'Apunte al código QR.';
-
-  })
-
-  .catch(function(error) {
-
-    console.error(
-      'Error iniciando lector QR:',
-      error
-    );
-
-
-    camaraActiva = false;
-
-    lectorQR = null;
-
-
-    const boton =
-      document.getElementById(
-        'btn-camara'
-      );
-
-
-    boton.disabled = false;
-
-    boton.innerText =
-      '📷 ACTIVAR CÁMARA';
-
-
-    const estado =
-      document.getElementById(
-        'estado-camara'
-      );
-
-
-    estado.style.background =
-      '#fee2e2';
-
-    estado.style.color =
-      '#991b1b';
-
-    estado.innerHTML =
-      '❌ <strong>No se pudo iniciar el lector QR.</strong><br>' +
-      escapeHTML(
-        error.message ||
-        String(error)
-      );
-
-  });
-
-}
-
-
-
-/* =====================================================
-   PROCESAR REGISTRO
-===================================================== */
-
-function procesarRegistro(idCodigo) {
-
-  if (escaneando) {
-
-    return;
-
-  }
-
-
-  escaneando = true;
-
-
-  const estado =
-    document.getElementById(
-      'estado'
-    ).value;
-
-
-  const resultado =
-    document.getElementById(
-      'resultado-box'
-    );
-
-
-  resultado.className = 'warn';
-
-  resultado.style.display = 'block';
-
-
-  resultado.innerHTML =
-    '<h3>⏳ Procesando...</h3>' +
-    '<p>Buscando DNI/Código...</p>';
-
-
-  cargarJSONP(
-
-    'apiRegistrar',
-
-    {
-
-      id: idCodigo,
-
-      tipo: tipoActual,
-
-      estado: estado
-
-    },
-
-    function(res) {
-
-      mostrarResultado(res);
-
-    }
-
-  );
-
-}
-
-
-
-/* =====================================================
-   RESULTADO
-===================================================== */
-
-function mostrarResultado(data) {
-
-  const resultado =
-    document.getElementById(
-      'resultado-box'
-    );
-
-
-  resultado.style.display =
-    'block';
-
-
-  if (
-    data &&
-    data.exito
-  ) {
-
-    resultado.className =
-      'ok';
-
-
-    const detalle =
-      tipoActual === 'personal'
-        ? 'Cargo'
-        : 'Grado/Sección';
-
-
-    const valorDetalle =
-      tipoActual === 'personal'
-        ? (
-            data.datos &&
-            data.datos.perfil
-              ? data.datos.perfil
-              : 'N/A'
-          )
-        : (
-            data.datos &&
-            data.datos.gradoSeccion
-              ? data.datos.gradoSeccion
-              : 'N/A'
-          );
-
-
-    resultado.innerHTML =
-
-      '<h3>✅ ' +
-      escapeHTML(
-        data.estado || 'REGISTRO'
-      ) +
-      ' REGISTRADO</h3>' +
-
-      '<p><strong>Hora:</strong> ' +
-      escapeHTML(
-        data.hora || ''
-      ) +
-      '</p>' +
-
-      '<p><strong>DNI/ID:</strong> ' +
-      escapeHTML(
-        data.datos?.id || ''
-      ) +
-      '</p>' +
-
-      '<p><strong>Nombres:</strong> ' +
-      escapeHTML(
-        data.datos?.nombre || ''
-      ) +
-      '</p>' +
-
-      '<p><strong>' +
-      detalle +
-      ':</strong> ' +
-      escapeHTML(
-        valorDetalle
-      ) +
-      '</p>' +
-
-      '<p><strong>Puntualidad:</strong> ' +
-      escapeHTML(
-        data.puntualidad || 'N/A'
-      ) +
-      '</p>';
-
-  }
-
-  else {
-
-    resultado.className =
-      'error';
-
-
-    resultado.innerHTML =
-
-      '<h3>❌ No Registrado</h3>' +
-
-      '<p>' +
-
-      escapeHTML(
-        data?.mensaje ||
-        'Error desconocido.'
-      ) +
-
-      '</p>';
-
-  }
-
-
-  setTimeout(function() {
-
-    escaneando = false;
-
-  }, 3000);
-
-}
-
-
-
-/* =====================================================
-   REGISTRO MANUAL
-===================================================== */
-
-function toggleManual() {
-
-  const contenedor =
-    document.getElementById(
-      'manual-container'
-    );
-
-
-  if (
-    contenedor.style.display ===
-    'block'
-  ) {
-
-    contenedor.style.display =
-      'none';
-
-  }
-
-  else {
-
-    contenedor.style.display =
-      'block';
-
-  }
-
-}
-
-
-
-/* =====================================================
-   ENVIAR DNI MANUAL
-===================================================== */
-
-function enviarManual() {
-
-  const dni =
     document
+      .getElementById('login-error')
+      .style.display = 'none';
+
+  }
+
+
+  /* =====================================================
+     CONSULTAR POR DNI
+     ===================================================== */
+
+  function consultarDNI() {
+
+    const dni =
+      document
+        .getElementById('dni-consulta')
+        .value
+        .trim();
+
+
+    const resultado =
+      document
+        .getElementById('resultado');
+
+
+    if (!dni) {
+
+      resultado.innerHTML = `
+
+        <div class="mensaje error">
+
+          ❌ Ingrese un DNI para realizar
+          la búsqueda.
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    resultado.innerHTML = `
+
+      <div class="mensaje info">
+
+        🔎 Consultando registros...
+
+      </div>
+
+    `;
+
+
+    eliminarJSONP();
+
+
+    jsonpScript =
+      document.createElement('script');
+
+
+    jsonpScript.src =
+
+      WEB_APP_URL +
+
+      '?action=apiConsultar' +
+
+      '&dni=' +
+      encodeURIComponent(dni) +
+
+      '&callback=respuestaConsulta';
+
+
+    jsonpScript.onerror =
+      function() {
+
+        resultado.innerHTML = `
+
+          <div class="mensaje error">
+
+            ❌ No se pudo conectar con
+            el servidor.
+
+          </div>
+
+        `;
+
+
+        eliminarJSONP();
+
+      };
+
+
+    document.body.appendChild(
+      jsonpScript
+    );
+
+  }
+
+
+  /* =====================================================
+     RESPUESTA CONSULTA
+     ===================================================== */
+
+  function respuestaConsulta(data) {
+
+    eliminarJSONP();
+
+
+    const resultado =
+      document
+        .getElementById('resultado');
+
+
+    if (!data) {
+
+      resultado.innerHTML = `
+
+        <div class="mensaje error">
+
+          ❌ Respuesta inválida del servidor.
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    if (!data.exito) {
+
+      resultado.innerHTML = `
+
+        <div class="mensaje error">
+
+          ❌ ${
+            escapar(
+              data.mensaje ||
+              'No se pudo realizar la consulta.'
+            )
+          }
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    if (
+      !data.registros ||
+      data.registros.length === 0
+    ) {
+
+      resultado.innerHTML = `
+
+        <div class="mensaje info">
+
+          ℹ️ No se encontraron registros
+          para el DNI
+
+          <strong>
+            ${escapar(dniConsultaActual())}
+          </strong>.
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    let html = `
+
+      <div class="mensaje exito">
+
+        ✅ Se encontraron
+
+        <strong>
+          ${data.total}
+        </strong>
+
+        registro(s).
+
+      </div>
+
+    `;
+
+
+    data.registros.forEach(
+      function(registro) {
+
+        const estado =
+          String(
+            registro.estado || ''
+          ).toUpperCase();
+
+
+        const puntualidad =
+          String(
+            registro.puntualidad || ''
+          ).toUpperCase();
+
+
+        const claseEstado =
+          estado === 'SALIDA'
+            ? 'salida'
+            : 'ingreso';
+
+
+        const clasePuntualidad =
+          puntualidad === 'PUNTUAL'
+            ? 'puntual'
+            : (
+                puntualidad === 'TARDE'
+                  ? 'tarde'
+                  : ''
+              );
+
+
+        html += `
+
+          <div class="registro">
+
+            <div class="registro-fecha">
+
+              📅 ${escapar(
+                registro.fecha || ''
+              )}
+
+              ${escapar(
+                registro.hora || ''
+              )}
+
+            </div>
+
+
+            <div class="dato">
+
+              <strong>DNI:</strong>
+
+              ${escapar(
+                registro.id || ''
+              )}
+
+            </div>
+
+
+            <div class="dato">
+
+              <strong>Nombre:</strong>
+
+              ${escapar(
+                registro.nombre || ''
+              )}
+
+            </div>
+
+        `;
+
+
+        if (
+          registro.tipo ===
+          'estudiante'
+        ) {
+
+          html += `
+
+            <div class="dato">
+
+              <strong>
+                Grado/Sección:
+              </strong>
+
+              ${escapar(
+                registro.gradoSeccion ||
+                'N/A'
+              )}
+
+            </div>
+
+          `;
+
+        } else {
+
+          html += `
+
+            <div class="dato">
+
+              <strong>
+                Cargo:
+              </strong>
+
+              ${escapar(
+                registro.perfil ||
+                'N/A'
+              )}
+
+            </div>
+
+          `;
+
+        }
+
+
+        html += `
+
+            <div class="dato">
+
+              <strong>
+                Puntualidad:
+              </strong>
+
+              <span class="${clasePuntualidad}">
+
+                ${escapar(
+                  puntualidad ||
+                  'N/A'
+                )}
+
+              </span>
+
+            </div>
+
+
+            <span class="estado ${claseEstado}">
+
+              ${escapar(
+                estado ||
+                'N/A'
+              )}
+
+            </span>
+
+
+          </div>
+
+        `;
+
+      }
+    );
+
+
+    resultado.innerHTML =
+      html;
+
+  }
+
+
+  /* =====================================================
+     OBTENER DNI DE LA CAJA
+     ===================================================== */
+
+  function dniConsultaActual() {
+
+    return document
       .getElementById(
-        'dni-manual'
+        'dni-consulta'
       )
       .value
       .trim();
 
-
-  if (!dni) {
-
-    alert(
-      'Ingrese un número de DNI.'
-    );
-
-    return;
-
   }
 
 
-  procesarRegistro(dni);
+  /* =====================================================
+     LOGIN
+     ===================================================== */
 
+  function iniciarSesion() {
 
-  document.getElementById(
-    'dni-manual'
-  ).value = '';
+    const usuario =
+      document
+        .getElementById('usuario')
+        .value
+        .trim();
 
-}
 
+    const password =
+      document
+        .getElementById('password')
+        .value
+        .trim();
 
 
-/* =====================================================
-   CERRAR ASISTENCIA
-===================================================== */
+    const error =
+      document
+        .getElementById('login-error');
 
-function cerrarAsistencia() {
-
-  detenerCamara();
-
-
-  document.getElementById(
-    'resultado-box'
-  ).style.display = 'none';
-
-
-  volverPortal();
-
-}
-
-
-
-/* =====================================================
-   DETENER CÁMARA
-===================================================== */
-
-function detenerCamara() {
-
-  if (lectorQR) {
-
-    lectorQR
-      .stop()
-      .then(function() {
-
-        lectorQR.clear();
-
-        lectorQR = null;
-
-      })
-      .catch(function() {
-
-        lectorQR = null;
-
-      });
-
-  }
-
-
-  camaraActiva = false;
-
-
-  const reader =
-    document.getElementById(
-      'reader'
-    );
-
-
-  if (reader) {
-
-    reader.innerHTML = '';
-
-  }
-
-
-  const estado =
-    document.getElementById(
-      'estado-camara'
-    );
-
-
-  if (estado) {
-
-    estado.innerHTML =
-      'Cámara detenida.';
-
-    estado.style.background =
-      '#e2e8f0';
-
-    estado.style.color =
-      '#334155';
-
-  }
-
-
-  const boton =
-    document.getElementById(
-      'btn-camara'
-    );
-
-
-  if (boton) {
-
-    boton.disabled = false;
-
-    boton.innerText =
-      '📷 ACTIVAR CÁMARA';
-
-  }
-
-}
-
-
-
-/* =====================================================
-   SEGURIDAD VISUAL
-===================================================== */
-
-function escapeHTML(valor) {
-
-  return String(valor ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-
-}
-
-/* =====================================================
-   CONSULTA DE ASISTENCIA
-===================================================== */
-
-function consultarAsistencia() {
-
-  const boton =
-    document.getElementById(
-      'btn-consultar'
-    );
-
-  const resumen =
-    document.getElementById(
-      'consulta-resumen'
-    );
-
-  const resultados =
-    document.getElementById(
-      'consulta-resultados'
-    );
-
-  const tabla =
-    document.getElementById(
-      'tabla-resultados'
-    );
-
-
-  const tipo =
-    document.getElementById(
-      'consulta-tipo'
-    ).value;
-
-
-  const fecha =
-    document.getElementById(
-      'consulta-fecha'
-    ).value;
-
-
-  const dni =
-    document.getElementById(
-      'consulta-dni'
-    ).value.trim();
-
-
-  const nombre =
-    document.getElementById(
-      'consulta-nombre'
-    ).value.trim();
-
-
-  const grado =
-    document.getElementById(
-      'consulta-grado'
-    ).value.trim();
-
-
-  const estado =
-    document.getElementById(
-      'consulta-estado'
-    ).value;
-
-
-  const puntualidad =
-    document.getElementById(
-      'consulta-puntualidad'
-    ).value;
-
-
-  boton.disabled = true;
-
-  boton.innerText =
-    '🔎 BUSCANDO...';
-
-
-  resultados.style.display =
-    'block';
-
-
-  tabla.innerHTML =
-    '<div class="estado-camara">' +
-    '⏳ Consultando registros...' +
-    '</div>';
-
-
-  resumen.style.display =
-    'none';
-
-
-  cargarJSONP(
-
-    'apiConsultar',
-
-    {
-
-      tipo: tipo,
-
-      fecha: fecha,
-
-      dni: dni,
-
-      nombre: nombre,
-
-      grado: grado,
-
-      estado: estado,
-
-      puntualidad: puntualidad
-
-    },
-
-    function(res) {
-
-      boton.disabled = false;
-
-      boton.innerText =
-        '🔎 BUSCAR REGISTROS';
-
-
-      if (
-        !res ||
-        !res.ok
-      ) {
-
-        tabla.innerHTML =
-
-          '<div id="resultado-box" class="error">' +
-
-          '<h3>❌ Error</h3>' +
-
-          '<p>' +
-
-          escapeHTML(
-            res?.mensaje ||
-            'No se pudo realizar la consulta.'
-          ) +
-
-          '</p>' +
-
-          '</div>';
-
-        return;
-
-      }
-
-
-      mostrarResultadosConsulta(
-        res.registros || []
-      );
-
-    }
-
-  );
-
-}
-
-
-
-/* =====================================================
-   MOSTRAR RESULTADOS
-===================================================== */
-
-function mostrarResultadosConsulta(
-  registros
-) {
-
-  const resumen =
-    document.getElementById(
-      'consulta-resumen'
-    );
-
-
-  const tabla =
-    document.getElementById(
-      'tabla-resultados'
-    );
-
-
-  resumen.style.display =
-    'block';
-
-
-  resumen.innerHTML =
-    '📊 Registros encontrados: ' +
-    registros.length;
-
-
-  if (
-    !registros ||
-    registros.length === 0
-  ) {
-
-    tabla.innerHTML =
-
-      '<div class="estado-camara">' +
-
-      '🔎 No se encontraron registros con los filtros seleccionados.' +
-
-      '</div>';
-
-    return;
-
-  }
-
-
-  let html = '';
-
-  registros.forEach(
-    function(r) {
-
-      const tipo =
-        r.tipo === 'personal'
-          ? '👨‍🏫 Personal'
-          : '👨‍🎓 Estudiante';
-
-
-      let claseEstado =
-        '';
-
-
-      if (
-        r.puntualidad ===
-        'PUNTUAL'
-      ) {
-
-        claseEstado =
-          'background:#dcfce7;color:#166534;';
-
-      }
-
-      else if (
-        r.puntualidad ===
-        'TARDE'
-      ) {
-
-        claseEstado =
-          'background:#fef3c7;color:#92400e;';
-
-      }
-
-
-      html +=
-
-        '<div style="' +
-        'border:1px solid #dbe3ec;' +
-        'border-radius:10px;' +
-        'padding:14px;' +
-        'margin-bottom:10px;' +
-        'background:#fff;' +
-        'text-align:left;' +
-        '">' +
-
-        '<div style="' +
-        'font-weight:bold;' +
-        'color:#123b68;' +
-        'margin-bottom:8px;' +
-        '">' +
-
-        tipo +
-
-        '</div>' +
-
-
-        '<p>' +
-
-        '<strong>Fecha:</strong> ' +
-
-        escapeHTML(
-          r.fecha || ''
-        ) +
-
-        '</p>' +
-
-
-        '<p>' +
-
-        '<strong>Hora:</strong> ' +
-
-        escapeHTML(
-          r.hora || ''
-        ) +
-
-        '</p>' +
-
-
-        '<p>' +
-
-        '<strong>DNI/ID:</strong> ' +
-
-        escapeHTML(
-          r.id || ''
-        ) +
-
-        '</p>' +
-
-
-        '<p>' +
-
-        '<strong>Nombres:</strong> ' +
-
-        escapeHTML(
-          r.nombre || ''
-        ) +
-
-        '</p>';
-
-
-      if (
-        r.tipo ===
-        'estudiante'
-      ) {
-
-        html +=
-
-          '<p>' +
-
-          '<strong>Grado/Sección:</strong> ' +
-
-          escapeHTML(
-            r.gradoSeccion || ''
-          ) +
-
-          '</p>';
-
-      }
-
-      else {
-
-        html +=
-
-          '<p>' +
-
-          '<strong>Cargo:</strong> ' +
-
-          escapeHTML(
-            r.perfil || ''
-          ) +
-
-          '</p>';
-
-      }
-
-
-      html +=
-
-        '<p>' +
-
-        '<strong>Estado:</strong> ' +
-
-        escapeHTML(
-          r.estado || ''
-        ) +
-
-        '</p>' +
-
-
-        '<p>' +
-
-        '<strong>Método:</strong> ' +
-
-        escapeHTML(
-          r.metodo || ''
-        ) +
-
-        '</p>' +
-
-
-        '<p>' +
-
-        '<strong>Puntualidad:</strong> ' +
-
-        '<span style="' +
-        'display:inline-block;' +
-        'padding:3px 8px;' +
-        'border-radius:5px;' +
-        claseEstado +
-        '">' +
-
-        escapeHTML(
-          r.puntualidad || 'N/A'
-        ) +
-
-        '</span>' +
-
-        '</p>' +
-
-
-        '</div>';
-
-    }
-  );
-
-
-  tabla.innerHTML =
-    html;
-
-}
-
-/* =====================================================
-   TECLA ENTER EN LOGIN
-===================================================== */
-
-document.addEventListener(
-  'keydown',
-  function(event) {
 
     if (
-      event.key === 'Enter' &&
-      document
-        .getElementById(
-          'vista-login'
-        )
-        .classList
-        .contains('activa')
+      !usuario ||
+      !password
     ) {
 
-      iniciarSesion();
+      error.textContent =
+        'Ingrese usuario y contraseña.';
+
+      error.style.display =
+        'block';
+
+      return;
+
+    }
+
+
+    error.style.display =
+      'none';
+
+
+    eliminarJSONP();
+
+
+    jsonpScript =
+      document.createElement(
+        'script'
+      );
+
+
+    jsonpScript.src =
+
+      WEB_APP_URL +
+
+      '?action=apiLogin' +
+
+      '&user=' +
+      encodeURIComponent(usuario) +
+
+      '&pass=' +
+      encodeURIComponent(password) +
+
+      '&callback=respuestaLogin';
+
+
+    jsonpScript.onerror =
+      function() {
+
+        error.textContent =
+          '❌ No se pudo conectar con el servidor.';
+
+        error.style.display =
+          'block';
+
+
+        eliminarJSONP();
+
+      };
+
+
+    document.body.appendChild(
+      jsonpScript
+    );
+
+  }
+
+
+  /* =====================================================
+     RESPUESTA DEL LOGIN
+     ===================================================== */
+
+  function respuestaLogin(data) {
+
+    eliminarJSONP();
+
+
+    const error =
+      document
+        .getElementById(
+          'login-error'
+        );
+
+
+    if (
+      data &&
+      data.ok
+    ) {
+
+      /*
+       * Marcamos que el usuario llegó
+       * al registro mediante el login.
+       */
+
+      sessionStorage.setItem(
+        'accesoRegistro',
+        '1'
+      );
+
+
+      /*
+       * Abrimos el formulario de
+       * registro.
+       */
+
+      window.location.href =
+        'registro.html';
+
+
+      return;
+
+    }
+
+
+    error.textContent =
+      '❌ Usuario o contraseña incorrectos.';
+
+
+    error.style.display =
+      'block';
+
+  }
+
+
+  /* =====================================================
+     ELIMINAR JSONP
+     ===================================================== */
+
+  function eliminarJSONP() {
+
+    if (jsonpScript) {
+
+      jsonpScript.remove();
+
+      jsonpScript = null;
 
     }
 
   }
-);
+
+
+  /* =====================================================
+     ESCAPAR TEXTO
+     ===================================================== */
+
+  function escapar(valor) {
+
+    return String(
+      valor || ''
+    )
+
+      .replace(
+        /&/g,
+        '&amp;'
+      )
+
+      .replace(
+        /</g,
+        '&lt;'
+      )
+
+      .replace(
+        />/g,
+        '&gt;'
+      )
+
+      .replace(
+        /"/g,
+        '&quot;'
+      )
+
+      .replace(
+        /'/g,
+        '&#039;'
+      );
+
+  }
+
 
 </script>
 
+
 </body>
+
 </html>
