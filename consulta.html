@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Consulta de Asistencia - IE MGP</title>
+
+  <style>
+
+    :root {
+      --azul: #0f2f55;
+      --azul2: #2563eb;
+      --verde: #059669;
+      --gris: #64748b;
+      --fondo: #f1f5f9;
+      --blanco: #ffffff;
+      --borde: #cbd5e1;
+      --rojo: #dc2626;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--fondo);
+      color: #1e293b;
+      padding: 20px 12px;
+    }
+
+    .contenedor {
+      width: 100%;
+      max-width: 560px;
+      margin: auto;
+    }
+
+    .encabezado {
+      background: var(--azul);
+      color: white;
+      padding: 22px 18px;
+      border-radius: 12px 12px 0 0;
+      text-align: center;
+    }
+
+    .encabezado h1 {
+      font-size: 21px;
+      line-height: 1.3;
+    }
+
+    .encabezado p {
+      margin-top: 7px;
+      font-size: 13px;
+      opacity: .9;
+    }
+
+    .tarjeta {
+      background: var(--blanco);
+      padding: 20px;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.08);
+    }
+
+    .tarjeta h2 {
+      color: var(--azul);
+      font-size: 19px;
+      margin-bottom: 8px;
+    }
+
+    .descripcion {
+      color: var(--gris);
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .tipo {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .tipo button {
+      flex: 1;
+      padding: 11px 8px;
+      border: 1px solid var(--borde);
+      background: #e2e8f0;
+      color: #334155;
+      border-radius: 7px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .tipo button.activo {
+      background: var(--azul);
+      color: white;
+      border-color: var(--azul);
+    }
+
+    .grupo {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--borde);
+      border-radius: 7px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--azul2);
+    }
+
+    #grupo-clave {
+      display: none;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 7px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    .btn-buscar {
+      background: var(--azul2);
+      color: white;
+    }
+
+    .btn-inicio {
+      background: var(--gris);
+      color: white;
+      margin-top: 10px;
+    }
+
+    #resultado {
+      margin-top: 18px;
+    }
+
+    .mensaje {
+      padding: 13px;
+      border-radius: 7px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .info {
+      background: #e0f2fe;
+      color: #075985;
+      border: 1px solid #7dd3fc;
+    }
+
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+    }
+
+    .exito {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #86efac;
+    }
+
+    .registro {
+      background: #f8fafc;
+      border: 1px solid var(--borde);
+      border-radius: 8px;
+      padding: 13px;
+      margin-top: 10px;
+    }
+
+    .registro-fecha {
+      color: var(--azul);
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .dato {
+      font-size: 13px;
+      margin: 5px 0;
+    }
+
+    .dato strong {
+      color: #334155;
+    }
+
+    .estado {
+      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: bold;
+      margin-top: 6px;
+    }
+
+    .ingreso {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .salida {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .puntual {
+      color: #15803d;
+      font-weight: bold;
+    }
+
+    .tarde {
+      color: #b45309;
+      font-weight: bold;
+    }
+
+    .pie {
+      text-align: center;
+      color: var(--gris);
+      font-size: 11px;
+      margin-top: 15px;
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+<div class="contenedor">
+
+  <div class="encabezado">
+
+    <h1>
+      IE JEC MANUEL GONZALES PRADA
+    </h1>
+
+    <p>
+      Consulta de asistencia
+    </p>
+
+  </div>
+
+
+  <div class="tarjeta">
+
+    <h2>
+      🔎 Consultar registro
+    </h2>
+
+    <div class="descripcion">
+
+      Seleccione el tipo de persona e ingrese
+      el DNI para consultar los registros
+      de asistencia.
+
+    </div>
+
+
+    <!-- =================================================
+         TIPO DE PERSONA
+         ================================================= -->
+
+    <div class="tipo">
+
+      <button
+        id="btn-estudiante"
+        class="activo"
+        onclick="seleccionarTipo('estudiante')"
+      >
+        👨‍🎓 ESTUDIANTE
+      </button>
+
+
+      <button
+        id="btn-personal"
+        onclick="seleccionarTipo('personal')"
+      >
+        👨‍🏫 DOCENTE
+      </button>
+
+    </div>
+
+
+    <!-- =================================================
+         DNI
+         ================================================= -->
+
+    <div class="grupo">
+
+      <label for="dni">
+        DNI / Código
+      </label>
+
+      <input
+        id="dni"
+        type="text"
+        inputmode="numeric"
+        maxlength="20"
+        placeholder="Ingrese DNI"
+        onkeydown="
+          if(event.key === 'Enter')
+            consultar();
+        "
+      >
+
+    </div>
+
+
+    <!-- =================================================
+         CLAVE DOCENTE
+         ================================================= -->
+
+    <div
+      id="grupo-clave"
+      class="grupo"
+    >
+
+      <label for="clave">
+        🔐 Clave de consulta
+      </label>
+
+      <input
+        id="clave"
+        type="password"
+        placeholder="Ingrese clave"
+        onkeydown="
+          if(event.key === 'Enter')
+            consultar();
+        "
+      >
+
+    </div>
+
+
+    <button
+      class="btn btn-buscar"
+      onclick="consultar()"
+    >
+      🔎 BUSCAR REGISTRO
+    </button>
+
+
+    <button
+      class="btn btn-inicio"
+      onclick="irInicio()"
+    >
+      ← VOLVER AL PORTAL
+    </button>
+
+
+    <div id="resultado"></div>
+
+  </div>
+
+
+  <div class="pie">
+
+    Sistema de asistencia institucional
+
+  </div>
+
+</div>
+
+
+<script>
+
+
+  /* =====================================================
+     CONFIGURACIÓN
+     ===================================================== */
+
+  const WEB_APP_URL =
+    'https://script.google.com/macros/s/AKfycbwgLFPzerWoMaT1AdJSHFWZStxKKeg-QNbtnEz9ENuSM8j91j_X-uqyUMTZVqQKJDY/exec';
+
+
+  let tipoActual = 'estudiante';
+
+  let jsonpScript = null;
+
+
+  /* =====================================================
+     SELECCIONAR TIPO
+     ===================================================== */
+
+  function seleccionarTipo(tipo) {
+
+    tipoActual = tipo;
+
+
+    document
+      .getElementById('btn-estudiante')
+      .classList.toggle(
+        'activo',
+        tipo === 'estudiante'
+      );
+
+
+    document
+      .getElementById('btn-personal')
+      .classList.toggle(
+        'activo',
+        tipo === 'personal'
+      );
+
+
+    const grupoClave =
+      document.getElementById(
+        'grupo-clave'
+      );
+
+
+    if (tipo === 'personal') {
+
+      grupoClave.style.display =
+        'block';
+
+    } else {
+
+      grupoClave.style.display =
+        'none';
+
+      document
+        .getElementById('clave')
+        .value = '';
+
+    }
+
+
+    document
+      .getElementById('resultado')
+      .innerHTML = '';
+
+  }
+
+
+  /* =====================================================
+     CONSULTAR
+     ===================================================== */
+
+  function consultar() {
+
+    const dni =
+      document
+        .getElementById('dni')
+        .value
+        .trim();
+
+
+    const clave =
+      document
+        .getElementById('clave')
+        .value
+        .trim();
+
+
+    const resultado =
+      document
+        .getElementById('resultado');
+
+
+    if (!dni) {
+
+      resultado.innerHTML = `
+
+        <div class="mensaje error">
+
+          ❌ Ingrese el DNI para realizar
+          la búsqueda.
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    if (
+      tipoActual === 'personal' &&
+      !clave
+    ) {
+
+      resultado.innerHTML = `
+
+        <div class="mensaje error">
+
+          🔐 Ingrese la clave de consulta
+          para docentes.
+
+        </div>
+
+      `;
+
+      document
+        .getElementById('clave')
+        .focus();
+
+      return;
+
+    }
+
+
+    resultado.innerHTML = `
+
+      <div class="mensaje info">
+
+        🔎 Consultando registros...
+
+      </div>
+
+    `;
+
+
+    eliminarJSONP();
+
+
+    jsonpScript =
+      document.createElement(
+        'script'
+      );
+
+
+    let url =
+
+      WEB_APP_URL +
+
+      '?action=apiConsultar' +
+
+      '&tipo=' +
+      encodeURIComponent(tipoActual) +
+
+      '&dni=' +
+      encodeURIComponent(dni) +
+
+      '&callback=respuestaConsulta';
+
+
+    if (
+      tipoActual === 'personal'
+    ) {
+
+      url +=
+
+        '&clave=' +
+        encodeURIComponent(clave);
+
+    }
+
+
+    jsonpScript.src = url;
+
+
+    jsonpScript.onerror =
+      function() {
+
+        resultado.innerHTML = `
+
+          <div class="mensaje error">
+
+            ❌ No se pudo conectar con
+            el servidor.
+
+          </div>
+
+        `;
+
+        eliminarJSONP();
+
+      };
+
+
+    document.body.appendChild(
+      jsonpScript
+    );
+
+  }
+
+
+  /* =====================================================
+     RESPUESTA
+     ===================================================== */
+
+  function respuestaConsulta(data) {
+
+    eliminarJSONP();
+
+
+    const resultado =
+      document
+        .getElementById(
+          'resultado'
+        );
+
+
+    if (!data) {
+
+      resultado.innerHTML = `
+
+        <div class="mensaje error">
+
+          ❌ Respuesta inválida del servidor.
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    if (!data.exito) {
+
+      resultado.innerHTML = `
+
+        <div class="mensaje error">
+
+          ❌ ${
+            escapar(
+              data.mensaje ||
+              'No se pudo realizar la consulta.'
+            )
+          }
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    if (
+      !data.registros ||
+      data.registros.length === 0
+    ) {
+
+      resultado.innerHTML = `
+
+        <div class="mensaje info">
+
+          ℹ️ No se encontraron registros
+          para el DNI indicado.
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    let html = `
+
+      <div class="mensaje exito">
+
+        ✅ Se encontraron
+
+        <strong>
+          ${data.total}
+        </strong>
+
+        registro(s).
+
+      </div>
+
+    `;
+
+
+    data.registros.forEach(
+      function(r) {
+
+        const estado =
+          String(
+            r.estado || ''
+          ).toUpperCase();
+
+
+        const puntualidad =
+          String(
+            r.puntualidad || ''
+          ).toUpperCase();
+
+
+        const claseEstado =
+          estado === 'SALIDA'
+            ? 'salida'
+            : 'ingreso';
+
+
+        const clasePuntualidad =
+          puntualidad === 'PUNTUAL'
+            ? 'puntual'
+            : (
+                puntualidad === 'TARDE'
+                  ? 'tarde'
+                  : ''
+              );
+
+
+        html += `
+
+          <div class="registro">
+
+            <div class="registro-fecha">
+
+              📅 ${escapar(
+                r.fecha || ''
+              )}
+
+              ${escapar(
+                r.hora || ''
+              )}
+
+            </div>
+
+
+            <div class="dato">
+
+              <strong>DNI:</strong>
+
+              ${escapar(
+                r.id || ''
+              )}
+
+            </div>
+
+
+            <div class="dato">
+
+              <strong>Nombre:</strong>
+
+              ${escapar(
+                r.nombre || ''
+              )}
+
+            </div>
+
+        `;
+
+
+        if (
+          tipoActual ===
+          'estudiante'
+        ) {
+
+          html += `
+
+            <div class="dato">
+
+              <strong>
+                Grado/Sección:
+              </strong>
+
+              ${escapar(
+                r.gradoSeccion ||
+                'N/A'
+              )}
+
+            </div>
+
+          `;
+
+        } else {
+
+          html += `
+
+            <div class="dato">
+
+              <strong>
+                Cargo:
+              </strong>
+
+              ${escapar(
+                r.perfil ||
+                'N/A'
+              )}
+
+            </div>
+
+          `;
+
+        }
+
+
+        html += `
+
+            <div class="dato">
+
+              <strong>
+                Puntualidad:
+              </strong>
+
+              <span class="${clasePuntualidad}">
+
+                ${escapar(
+                  puntualidad ||
+                  'N/A'
+                )}
+
+              </span>
+
+            </div>
+
+
+            <span class="estado ${claseEstado}">
+
+              ${escapar(
+                estado ||
+                'N/A'
+              )}
+
+            </span>
+
+
+          </div>
+
+        `;
+
+      }
+    );
+
+
+    resultado.innerHTML =
+      html;
+
+  }
+
+
+  /* =====================================================
+     ELIMINAR JSONP
+     ===================================================== */
+
+  function eliminarJSONP() {
+
+    if (jsonpScript) {
+
+      jsonpScript.remove();
+
+      jsonpScript = null;
+
+    }
+
+  }
+
+
+  /* =====================================================
+     VOLVER AL PORTAL
+     ===================================================== */
+
+  function irInicio() {
+
+    window.location.href =
+      'index.html';
+
+  }
+
+
+  /* =====================================================
+     SEGURIDAD HTML
+     ===================================================== */
+
+  function escapar(valor) {
+
+    return String(
+      valor || ''
+    )
+
+      .replace(
+        /&/g,
+        '&amp;'
+      )
+
+      .replace(
+        /</g,
+        '&lt;'
+      )
+
+      .replace(
+        />/g,
+        '&gt;'
+      )
+
+      .replace(
+        /"/g,
+        '&quot;'
+      )
+
+      .replace(
+        /'/g,
+        '&#039;'
+      );
+
+  }
+
+
+</script>
+
+
+</body>
+
+</html>
