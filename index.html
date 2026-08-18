@@ -492,84 +492,61 @@
 
   <div id="public-view">
 
+  <!-- ==========================================
+       CONSULTA PÚBLICA
+       ========================================== -->
 
-    <!-- CONSULTA -->
+  <div class="tarjeta">
 
-    <div class="tarjeta">
+    <h2>
+      🔎 Consultar asistencia
+    </h2>
 
-      <h2>
-        🔎 Consultar asistencia
-      </h2>
+    <div class="descripcion">
 
-      <div class="descripcion">
-
-        Consulte los registros de asistencia
-        ingresando únicamente el número de DNI.
-
-      </div>
-
-
-      <div class="grupo">
-
-        <label for="dni-consulta">
-          DNI / Código
-        </label>
-
-        <input
-          id="dni-consulta"
-          type="text"
-          inputmode="numeric"
-          maxlength="20"
-          placeholder="Ingrese DNI"
-          onkeydown="
-            if(event.key==='Enter')
-              consultarDNI();
-          "
-        >
-
-      </div>
-
-
-      <button
-        class="btn-consultar"
-        onclick="consultarDNI()"
-      >
-        🔎 BUSCAR REGISTRO
-      </button>
-
-
-      <div id="resultado"></div>
+      Consulte los registros de asistencia
+      de estudiantes y docentes.
 
     </div>
 
-
-    <!-- ACCESO REGISTRO -->
-
-    <div class="tarjeta">
-
-      <h2>
-        🔐 Registrar asistencia
-      </h2>
-
-      <div class="descripcion">
-
-        Acceso restringido para el personal
-        autorizado para registrar asistencia.
-
-      </div>
-
-
-      <button
-        class="btn-registro"
-        onclick="mostrarLogin()"
-      >
-        INGRESAR AL REGISTRO
-      </button>
-
-    </div>
-
+    <button
+      class="btn-consultar"
+      onclick="irAConsulta()"
+    >
+      🔎 INGRESAR A CONSULTA
+    </button>
 
   </div>
+
+
+  <!-- ==========================================
+       ACCESO REGISTRO
+       ========================================== -->
+
+  <div class="tarjeta">
+
+    <h2>
+      🔐 Registrar asistencia
+    </h2>
+
+    <div class="descripcion">
+
+      Acceso restringido para el personal
+      autorizado para registrar asistencia.
+
+    </div>
+
+    <button
+      class="btn-registro"
+      onclick="mostrarLogin()"
+    >
+      INGRESAR AL REGISTRO
+    </button>
+
+  </div>
+
+
+</div>
 
 
   <!-- ===================================================
@@ -664,7 +641,12 @@
 
 </div>
 
+function irAConsulta() {
 
+  window.location.href =
+    'consulta.html';
+
+}
 <script>
 
 
