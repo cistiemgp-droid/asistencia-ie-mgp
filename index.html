@@ -18,6 +18,7 @@
   <style>
 
     :root {
+
       --azul: #0f2f55;
       --azul2: #2563eb;
       --celeste: #38bdf8;
@@ -27,13 +28,16 @@
       --fondo: #f1f5f9;
       --blanco: #ffffff;
       --borde: #cbd5e1;
+
     }
 
 
     * {
+
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+
     }
 
 
@@ -217,13 +221,35 @@
     }
 
 
-    <a
-  href="consulta.html"
-  class="btn-consultar"
-  style="display:block;text-align:center;text-decoration:none;"
->
-  🔎 INGRESAR A CONSULTA
-</a>
+    /* BOTÓN CONSULTA */
+
+    .btn-consultar {
+
+      display: block;
+
+      width: 100%;
+
+      padding: 12px;
+
+      margin-top: 8px;
+
+      background: var(--azul2);
+
+      color: white;
+
+      border-radius: 7px;
+
+      font-size: 15px;
+
+      font-weight: bold;
+
+      text-align: center;
+
+      text-decoration: none;
+
+      cursor: pointer;
+
+    }
 
 
     .btn-consultar:hover {
@@ -233,6 +259,8 @@
     }
 
 
+    /* BOTÓN REGISTRO */
+
     .btn-registro {
 
       background: var(--verde);
@@ -241,6 +269,8 @@
 
     }
 
+
+    /* BOTÓN VOLVER */
 
     .btn-volver {
 
@@ -445,6 +475,10 @@
     }
 
 
+    /* =====================================================
+       PIE
+       ===================================================== */
+
     .pie {
 
       text-align: center;
@@ -456,7 +490,6 @@
       margin-top: 15px;
 
     }
-
 
   </style>
 
@@ -492,61 +525,73 @@
 
   <div id="public-view">
 
-  <!-- ==========================================
-       CONSULTA PÚBLICA
-       ========================================== -->
 
-  <div class="tarjeta">
+    <!-- =================================================
+         CONSULTA PÚBLICA
+         ================================================= -->
 
-    <h2>
-      🔎 Consultar asistencia
-    </h2>
+    <div class="tarjeta">
 
-    <div class="descripcion">
+      <h2>
+        🔎 Consultar asistencia
+      </h2>
 
-      Consulte los registros de asistencia
-      de estudiantes y docentes.
+      <div class="descripcion">
 
-    </div>
+        Consulte los registros de asistencia
+        de estudiantes y docentes.
 
-    <button
-      class="btn-consultar"
-      onclick="irAConsulta()"
-    >
-      🔎 INGRESAR A CONSULTA
-    </button>
-
-  </div>
+      </div>
 
 
-  <!-- ==========================================
-       ACCESO REGISTRO
-       ========================================== -->
+      <!--
 
-  <div class="tarjeta">
+        IMPORTANTE:
 
-    <h2>
-      🔐 Registrar asistencia
-    </h2>
+        Se utiliza enlace directo a consulta.html.
+        No depende de ninguna función JavaScript.
 
-    <div class="descripcion">
+      -->
 
-      Acceso restringido para el personal
-      autorizado para registrar asistencia.
+      <a
+        href="./consulta.html"
+        class="btn-consultar"
+      >
+        🔎 INGRESAR A CONSULTA
+      </a>
 
     </div>
 
-    <button
-      class="btn-registro"
-      onclick="mostrarLogin()"
-    >
-      INGRESAR AL REGISTRO
-    </button>
+
+    <!-- =================================================
+         ACCESO REGISTRO
+         ================================================= -->
+
+    <div class="tarjeta">
+
+      <h2>
+        🔐 Registrar asistencia
+      </h2>
+
+      <div class="descripcion">
+
+        Acceso restringido para el personal
+        autorizado para registrar asistencia.
+
+      </div>
+
+
+      <button
+        class="btn-registro"
+        onclick="mostrarLogin()"
+      >
+        INGRESAR AL REGISTRO
+      </button>
+
+    </div>
+
 
   </div>
-
-
-</div>
 
 
   <!-- ===================================================
@@ -632,6 +677,10 @@
   </div>
 
 
+  <!-- ===================================================
+       PIE
+       =================================================== -->
+
   <div class="pie">
 
     Sistema de asistencia institucional
@@ -713,374 +762,11 @@
 
 
   /* =====================================================
-     CONSULTAR POR DNI
-     ===================================================== */
-
-  function consultarDNI() {
-
-    const dni =
-      document
-        .getElementById('dni-consulta')
-        .value
-        .trim();
-
-
-    const resultado =
-      document
-        .getElementById('resultado');
-
-
-    if (!dni) {
-
-      resultado.innerHTML = `
-
-        <div class="mensaje error">
-
-          ❌ Ingrese un DNI para realizar
-          la búsqueda.
-
-        </div>
-
-      `;
-
-      return;
-
-    }
-
-
-    resultado.innerHTML = `
-
-      <div class="mensaje info">
-
-        🔎 Consultando registros...
-
-      </div>
-
-    `;
-
-
-    eliminarJSONP();
-
-
-    jsonpScript =
-      document.createElement('script');
-
-
-    jsonpScript.src =
-
-      WEB_APP_URL +
-
-      '?action=apiConsultar' +
-
-      '&dni=' +
-      encodeURIComponent(dni) +
-
-      '&callback=respuestaConsulta';
-
-
-    jsonpScript.onerror =
-      function() {
-
-        resultado.innerHTML = `
-
-          <div class="mensaje error">
-
-            ❌ No se pudo conectar con
-            el servidor.
-
-          </div>
-
-        `;
-
-
-        eliminarJSONP();
-
-      };
-
-
-    document.body.appendChild(
-      jsonpScript
-    );
-
-  }
-
-
-  /* =====================================================
-     RESPUESTA CONSULTA
-     ===================================================== */
-
-  function respuestaConsulta(data) {
-
-    eliminarJSONP();
-
-
-    const resultado =
-      document
-        .getElementById('resultado');
-
-
-    if (!data) {
-
-      resultado.innerHTML = `
-
-        <div class="mensaje error">
-
-          ❌ Respuesta inválida del servidor.
-
-        </div>
-
-      `;
-
-      return;
-
-    }
-
-
-    if (!data.exito) {
-
-      resultado.innerHTML = `
-
-        <div class="mensaje error">
-
-          ❌ ${
-            escapar(
-              data.mensaje ||
-              'No se pudo realizar la consulta.'
-            )
-          }
-
-        </div>
-
-      `;
-
-      return;
-
-    }
-
-
-    if (
-      !data.registros ||
-      data.registros.length === 0
-    ) {
-
-      resultado.innerHTML = `
-
-        <div class="mensaje info">
-
-          ℹ️ No se encontraron registros
-          para el DNI
-
-          <strong>
-            ${escapar(dniConsultaActual())}
-          </strong>.
-
-        </div>
-
-      `;
-
-      return;
-
-    }
-
-
-    let html = `
-
-      <div class="mensaje exito">
-
-        ✅ Se encontraron
-
-        <strong>
-          ${data.total}
-        </strong>
-
-        registro(s).
-
-      </div>
-
-    `;
-
-
-    data.registros.forEach(
-      function(registro) {
-
-        const estado =
-          String(
-            registro.estado || ''
-          ).toUpperCase();
-
-
-        const puntualidad =
-          String(
-            registro.puntualidad || ''
-          ).toUpperCase();
-
-
-        const claseEstado =
-          estado === 'SALIDA'
-            ? 'salida'
-            : 'ingreso';
-
-
-        const clasePuntualidad =
-          puntualidad === 'PUNTUAL'
-            ? 'puntual'
-            : (
-                puntualidad === 'TARDE'
-                  ? 'tarde'
-                  : ''
-              );
-
-
-        html += `
-
-          <div class="registro">
-
-            <div class="registro-fecha">
-
-              📅 ${escapar(
-                registro.fecha || ''
-              )}
-
-              ${escapar(
-                registro.hora || ''
-              )}
-
-            </div>
-
-
-            <div class="dato">
-
-              <strong>DNI:</strong>
-
-              ${escapar(
-                registro.id || ''
-              )}
-
-            </div>
-
-
-            <div class="dato">
-
-              <strong>Nombre:</strong>
-
-              ${escapar(
-                registro.nombre || ''
-              )}
-
-            </div>
-
-        `;
-
-
-        if (
-          registro.tipo ===
-          'estudiante'
-        ) {
-
-          html += `
-
-            <div class="dato">
-
-              <strong>
-                Grado/Sección:
-              </strong>
-
-              ${escapar(
-                registro.gradoSeccion ||
-                'N/A'
-              )}
-
-            </div>
-
-          `;
-
-        } else {
-
-          html += `
-
-            <div class="dato">
-
-              <strong>
-                Cargo:
-              </strong>
-
-              ${escapar(
-                registro.perfil ||
-                'N/A'
-              )}
-
-            </div>
-
-          `;
-
-        }
-
-
-        html += `
-
-            <div class="dato">
-
-              <strong>
-                Puntualidad:
-              </strong>
-
-              <span class="${clasePuntualidad}">
-
-                ${escapar(
-                  puntualidad ||
-                  'N/A'
-                )}
-
-              </span>
-
-            </div>
-
-
-            <span class="estado ${claseEstado}">
-
-              ${escapar(
-                estado ||
-                'N/A'
-              )}
-
-            </span>
-
-
-          </div>
-
-        `;
-
-      }
-    );
-
-
-    resultado.innerHTML =
-      html;
-
-  }
-
-
-  /* =====================================================
-     OBTENER DNI DE LA CAJA
-     ===================================================== */
-
-  function dniConsultaActual() {
-
-    return document
-      .getElementById(
-        'dni-consulta'
-      )
-      .value
-      .trim();
-
-  }
-
-
-  /* =====================================================
      LOGIN
      ===================================================== */
 
   function iniciarSesion() {
+
 
     const usuario =
       document
@@ -1131,17 +817,12 @@
 
 
     jsonpScript.src =
-
       WEB_APP_URL +
-
       '?action=apiLogin' +
-
       '&user=' +
       encodeURIComponent(usuario) +
-
       '&pass=' +
       encodeURIComponent(password) +
-
       '&callback=respuestaLogin';
 
 
@@ -1153,7 +834,6 @@
 
         error.style.display =
           'block';
-
 
         eliminarJSONP();
 
@@ -1173,6 +853,7 @@
 
   function respuestaLogin(data) {
 
+
     eliminarJSONP();
 
 
@@ -1188,9 +869,10 @@
       data.ok
     ) {
 
+
       /*
-       * Marcamos que el usuario llegó
-       * al registro mediante el login.
+       * Marcamos que el usuario
+       * llegó al registro mediante login.
        */
 
       sessionStorage.setItem(
@@ -1200,12 +882,12 @@
 
 
       /*
-       * Abrimos el formulario de
-       * registro.
+       * Abrimos el formulario
+       * de registro.
        */
 
       window.location.href =
-        'registro.html';
+        './registro.html';
 
 
       return;
