@@ -611,7 +611,7 @@
 
 
 <!-- =====================================================
-     VISTA 4 — CONSULTA
+     VISTA 4 — CONSULTA DE ASISTENCIA
 ===================================================== -->
 
 <section id="vista-consulta" class="vista">
@@ -620,25 +620,195 @@
 
     <h2>📊 Consulta de Asistencia</h2>
 
-    <p style="text-align:center;color:#64748b;">
-
-      Módulo preparado para la consulta de registros.
-
+    <p style="text-align:center;color:#64748b;margin-bottom:18px;">
+      Busque y consulte los registros de asistencia.
     </p>
 
-    <div
-      style="
-      background:#fff7ed;
-      color:#9a3412;
-      padding:15px;
-      border-radius:8px;
-      margin-top:15px;
-      text-align:center;">
 
-      🚧 Módulo de consulta en desarrollo.
+    <!-- TIPO -->
+
+    <div class="campo">
+
+      <label>Tipo de persona</label>
+
+      <select id="consulta-tipo">
+
+        <option value="todos">
+          Todos
+        </option>
+
+        <option value="estudiante">
+          Estudiantes
+        </option>
+
+        <option value="personal">
+          Personal
+        </option>
+
+      </select>
 
     </div>
 
+
+    <!-- FECHA -->
+
+    <div class="campo">
+
+      <label>Fecha</label>
+
+      <input
+        type="date"
+        id="consulta-fecha">
+
+    </div>
+
+
+    <!-- DNI -->
+
+    <div class="campo">
+
+      <label>DNI / Código</label>
+
+      <input
+        type="text"
+        id="consulta-dni"
+        placeholder="DNI o código">
+
+    </div>
+
+
+    <!-- NOMBRE -->
+
+    <div class="campo">
+
+      <label>Apellidos y Nombres</label>
+
+      <input
+        type="text"
+        id="consulta-nombre"
+        placeholder="Buscar por nombre">
+
+    </div>
+
+
+    <!-- GRADO -->
+
+    <div
+      class="campo"
+      id="consulta-grado-contenedor">
+
+      <label>Grado / Sección</label>
+
+      <input
+        type="text"
+        id="consulta-grado"
+        placeholder="Ejemplo: 3° A">
+
+    </div>
+
+
+    <!-- ESTADO -->
+
+    <div class="campo">
+
+      <label>Estado</label>
+
+      <select id="consulta-estado">
+
+        <option value="todos">
+          Todos
+        </option>
+
+        <option value="INGRESO">
+          INGRESO
+        </option>
+
+        <option value="SALIDA">
+          SALIDA
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <!-- PUNTUALIDAD -->
+
+    <div class="campo">
+
+      <label>Puntualidad</label>
+
+      <select id="consulta-puntualidad">
+
+        <option value="todos">
+          Todos
+        </option>
+
+        <option value="PUNTUAL">
+          PUNTUAL
+        </option>
+
+        <option value="TARDE">
+          TARDE
+        </option>
+
+        <option value="N/A">
+          N/A
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <!-- BOTÓN BUSCAR -->
+
+    <button
+      id="btn-consultar"
+      class="boton boton-principal"
+      onclick="consultarAsistencia()">
+
+      🔎 BUSCAR REGISTROS
+
+    </button>
+
+
+    <!-- RESULTADO RESUMEN -->
+
+    <div
+      id="consulta-resumen"
+      style="
+      display:none;
+      margin-top:15px;
+      padding:12px;
+      border-radius:8px;
+      background:#eaf4fb;
+      color:#123b68;
+      text-align:center;
+      font-weight:bold;">
+
+    </div>
+
+  </div>
+
+
+  <!-- =================================================
+       RESULTADOS
+  ================================================== -->
+
+  <div
+    class="card"
+    id="consulta-resultados"
+    style="display:none;">
+
+    <h2>Resultados</h2>
+
+    <div id="tabla-resultados"></div>
+
+  </div>
+
+
+  <div class="card">
 
     <button
       class="boton boton-gris"
@@ -651,7 +821,6 @@
   </div>
 
 </section>
-
 
 </div>
 
@@ -1710,7 +1879,403 @@ function escapeHTML(valor) {
 
 }
 
+/* =====================================================
+   CONSULTA DE ASISTENCIA
+===================================================== */
 
+function consultarAsistencia() {
+
+  const boton =
+    document.getElementById(
+      'btn-consultar'
+    );
+
+  const resumen =
+    document.getElementById(
+      'consulta-resumen'
+    );
+
+  const resultados =
+    document.getElementById(
+      'consulta-resultados'
+    );
+
+  const tabla =
+    document.getElementById(
+      'tabla-resultados'
+    );
+
+
+  const tipo =
+    document.getElementById(
+      'consulta-tipo'
+    ).value;
+
+
+  const fecha =
+    document.getElementById(
+      'consulta-fecha'
+    ).value;
+
+
+  const dni =
+    document.getElementById(
+      'consulta-dni'
+    ).value.trim();
+
+
+  const nombre =
+    document.getElementById(
+      'consulta-nombre'
+    ).value.trim();
+
+
+  const grado =
+    document.getElementById(
+      'consulta-grado'
+    ).value.trim();
+
+
+  const estado =
+    document.getElementById(
+      'consulta-estado'
+    ).value;
+
+
+  const puntualidad =
+    document.getElementById(
+      'consulta-puntualidad'
+    ).value;
+
+
+  boton.disabled = true;
+
+  boton.innerText =
+    '🔎 BUSCANDO...';
+
+
+  resultados.style.display =
+    'block';
+
+
+  tabla.innerHTML =
+    '<div class="estado-camara">' +
+    '⏳ Consultando registros...' +
+    '</div>';
+
+
+  resumen.style.display =
+    'none';
+
+
+  cargarJSONP(
+
+    'apiConsultar',
+
+    {
+
+      tipo: tipo,
+
+      fecha: fecha,
+
+      dni: dni,
+
+      nombre: nombre,
+
+      grado: grado,
+
+      estado: estado,
+
+      puntualidad: puntualidad
+
+    },
+
+    function(res) {
+
+      boton.disabled = false;
+
+      boton.innerText =
+        '🔎 BUSCAR REGISTROS';
+
+
+      if (
+        !res ||
+        !res.ok
+      ) {
+
+        tabla.innerHTML =
+
+          '<div id="resultado-box" class="error">' +
+
+          '<h3>❌ Error</h3>' +
+
+          '<p>' +
+
+          escapeHTML(
+            res?.mensaje ||
+            'No se pudo realizar la consulta.'
+          ) +
+
+          '</p>' +
+
+          '</div>';
+
+        return;
+
+      }
+
+
+      mostrarResultadosConsulta(
+        res.registros || []
+      );
+
+    }
+
+  );
+
+}
+
+
+
+/* =====================================================
+   MOSTRAR RESULTADOS
+===================================================== */
+
+function mostrarResultadosConsulta(
+  registros
+) {
+
+  const resumen =
+    document.getElementById(
+      'consulta-resumen'
+    );
+
+
+  const tabla =
+    document.getElementById(
+      'tabla-resultados'
+    );
+
+
+  resumen.style.display =
+    'block';
+
+
+  resumen.innerHTML =
+    '📊 Registros encontrados: ' +
+    registros.length;
+
+
+  if (
+    !registros ||
+    registros.length === 0
+  ) {
+
+    tabla.innerHTML =
+
+      '<div class="estado-camara">' +
+
+      '🔎 No se encontraron registros con los filtros seleccionados.' +
+
+      '</div>';
+
+    return;
+
+  }
+
+
+  let html = '';
+
+  registros.forEach(
+    function(r) {
+
+      const tipo =
+        r.tipo === 'personal'
+          ? '👨‍🏫 Personal'
+          : '👨‍🎓 Estudiante';
+
+
+      let claseEstado =
+        '';
+
+
+      if (
+        r.puntualidad ===
+        'PUNTUAL'
+      ) {
+
+        claseEstado =
+          'background:#dcfce7;color:#166534;';
+
+      }
+
+      else if (
+        r.puntualidad ===
+        'TARDE'
+      ) {
+
+        claseEstado =
+          'background:#fef3c7;color:#92400e;';
+
+      }
+
+
+      html +=
+
+        '<div style="' +
+        'border:1px solid #dbe3ec;' +
+        'border-radius:10px;' +
+        'padding:14px;' +
+        'margin-bottom:10px;' +
+        'background:#fff;' +
+        'text-align:left;' +
+        '">' +
+
+        '<div style="' +
+        'font-weight:bold;' +
+        'color:#123b68;' +
+        'margin-bottom:8px;' +
+        '">' +
+
+        tipo +
+
+        '</div>' +
+
+
+        '<p>' +
+
+        '<strong>Fecha:</strong> ' +
+
+        escapeHTML(
+          r.fecha || ''
+        ) +
+
+        '</p>' +
+
+
+        '<p>' +
+
+        '<strong>Hora:</strong> ' +
+
+        escapeHTML(
+          r.hora || ''
+        ) +
+
+        '</p>' +
+
+
+        '<p>' +
+
+        '<strong>DNI/ID:</strong> ' +
+
+        escapeHTML(
+          r.id || ''
+        ) +
+
+        '</p>' +
+
+
+        '<p>' +
+
+        '<strong>Nombres:</strong> ' +
+
+        escapeHTML(
+          r.nombre || ''
+        ) +
+
+        '</p>';
+
+
+      if (
+        r.tipo ===
+        'estudiante'
+      ) {
+
+        html +=
+
+          '<p>' +
+
+          '<strong>Grado/Sección:</strong> ' +
+
+          escapeHTML(
+            r.gradoSeccion || ''
+          ) +
+
+          '</p>';
+
+      }
+
+      else {
+
+        html +=
+
+          '<p>' +
+
+          '<strong>Cargo:</strong> ' +
+
+          escapeHTML(
+            r.perfil || ''
+          ) +
+
+          '</p>';
+
+      }
+
+
+      html +=
+
+        '<p>' +
+
+        '<strong>Estado:</strong> ' +
+
+        escapeHTML(
+          r.estado || ''
+        ) +
+
+        '</p>' +
+
+
+        '<p>' +
+
+        '<strong>Método:</strong> ' +
+
+        escapeHTML(
+          r.metodo || ''
+        ) +
+
+        '</p>' +
+
+
+        '<p>' +
+
+        '<strong>Puntualidad:</strong> ' +
+
+        '<span style="' +
+        'display:inline-block;' +
+        'padding:3px 8px;' +
+        'border-radius:5px;' +
+        claseEstado +
+        '">' +
+
+        escapeHTML(
+          r.puntualidad || 'N/A'
+        ) +
+
+        '</span>' +
+
+        '</p>' +
+
+
+        '</div>';
+
+    }
+  );
+
+
+  tabla.innerHTML =
+    html;
+
+}
 
 /* =====================================================
    TECLA ENTER EN LOGIN
