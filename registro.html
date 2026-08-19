@@ -653,11 +653,16 @@
     }
 
 
-   const id =
-  String(idCodigo || '')
+   const contenidoQR =
+  String(idCodigo || '').trim();
+
+const partesQR =
+  contenidoQR.split(',');
+
+const id =
+  String(partesQR[0] || '')
     .replace(/\s+/g, '')
     .trim();
-
 
     if (!id) {
       return;
