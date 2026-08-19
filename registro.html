@@ -653,9 +653,10 @@
     }
 
 
-    const id =
-      String(idCodigo || '')
-        .trim();
+   const id =
+  String(idCodigo || '')
+    .replace(/\s+/g, '')
+    .trim();
 
 
     if (!id) {
