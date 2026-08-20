@@ -437,165 +437,412 @@
      ACTIVAR CÁMARA
      ===================================================== */
 
-  async function activarCamara() {
+     async function activarCamara() {
 
-    if (camaraActiva) {
-      return;
-    }
+  if (camaraActiva) {
+    return;
+  }
 
-    const readerContainer =
-      document.getElementById(
-        'reader-container'
+  const readerContainer =
+    document.getElementById(
+      'reader-container'
+    );
+
+  const status =
+    document.getElementById(
+      'camera-status'
+    );
+
+  const btnCamera =
+    document.getElementById(
+      'btn-camera'
+    );
+
+  const btnStop =
+    document.getElementById(
+      'btn-stop'
+    );
+
+  const btnSwitchCamera =
+    document.getElementById(
+      'btn-switch-camera'
+    );
+
+
+  /*
+   * ==========================================================
+   * DETERMINAR SI EL DISPOSITIVO ES MÓVIL
+   * ==========================================================
+   */
+
+  const esMovil =
+    /Android|iPhone|iPad|iPod/i.test(
+      navigator.userAgent
+    ) ||
+    navigator.maxTouchPoints > 1;
+
+
+  try {
+
+    status.textContent =
+      'Solicitando acceso a la cámara...';
+
+    readerContainer.style.display =
+      'block';
+
+    btnCamera.disabled =
+      true;
+
+
+    /*
+     * ==========================================================
+     * CREAR LECTOR QR
+     * ==========================================================
+     */
+
+    html5QrCode =
+      new Html5Qrcode(
+        'reader'
       );
 
-    const status =
-      document.getElementById(
-        'camera-status'
-      );
 
-    const btnCamera =
-      document.getElementById(
-        'btn-camera'
-      );
+    /*
+     * ==========================================================
+     * SELECCIONAR CÁMARA
+     *
+     * false = cámara trasera
+     * true  = cámara frontal
+     * ==========================================================
+     */
 
-    const btnStop =
-      document.getElementById(
-        'btn-stop'
-      );
-    const btnSwitchCamera =
-  document.getElementById(
-    'btn-switch-camera'
-  );
-
-    try {
-
-      status.textContent =
-        'Solicitando acceso a la cámara...';
-
-      readerContainer.style.display =
-        'block';
-
-      btnCamera.disabled =
-        true;
+    const camara =
+      camaraFrontal
+        ? 'user'
+        : 'environment';
 
 
-      html5QrCode =
-        new Html5Qrcode('reader');
+    await html5QrCode.start(
 
+      {
+        facingMode: camara
+      },
 
-      /*
-       * Se solicita explícitamente
-       * la cámara trasera.
-       */
+      {
 
-      await html5QrCode.start(
+        fps: 10,
 
-        {
-  facingMode:
-    camaraFrontal
-      ? 'user'
-      : 'environment'
-},
+        qrbox: function(
+          viewfinderWidth,
+          viewfinderHeight
+        ) {
 
-        {
-          fps: 10,
+          const size =
+            Math.min(
+              viewfinderWidth,
+              viewfinderHeight
+            ) * 0.70;
 
-          qrbox: function(
-            viewfinderWidth,
-            viewfinderHeight
-          ) {
-
-            const size =
-              Math.min(
-                viewfinderWidth,
-                viewfinderHeight
-              ) * 0.70;
-
-            return {
-              width: size,
-              height: size
-            };
-
-          },
-
-          aspectRatio: 1.0
+          return {
+            width: size,
+            height: size
+          };
 
         },
 
-        function(decodedText) {
+        aspectRatio: 1.0
 
-          procesarRegistro(
-            decodedText,
-            'QR'
-          );
+      },
 
-        },
+      function(decodedText) {
 
-        function(errorMessage) {
+        procesarRegistro(
+          decodedText,
+          'QR'
+        );
 
-          /*
-           * Los errores normales de lectura QR
-           * no se muestran al usuario.
-           */
+      },
 
-        }
+      function(errorMessage) {
 
-      );
+        /*
+         * Los errores normales de lectura
+         * QR no se muestran al usuario.
+         */
+
+      }
+
+    );
 
 
-      camaraActiva = true;
+    /*
+     * ==========================================================
+     * CÁMARA ACTIVADA CORRECTAMENTE
+     * ==========================================================
+     */
 
-      status.textContent =
-        '📷 Cámara activa. Apunte al código QR.';
+    camaraActiva =
+      true;
 
-      btnCamera.style.display =
-        'none';
 
-      btnStop.style.display =
+    status.textContent =
+      camaraFrontal
+        ? '🤳 Cámara frontal activa. Apunte al código QR.'
+        : '📷 Cámara trasera activa. Apunte al código QR.';
+
+
+    btnCamera.style.display =
+      'none';
+
+
+    btnStop.style.display =
+      'block';
+
+
+    /*
+     * ==========================================================
+     * MOSTRAR CAMBIAR CÁMARA SOLO EN CELULARES/TABLETS
+     * ==========================================================
+     */
+
+    if (esMovil) {
+
+      btnSwitchCamera.style.display =
         'block';
 
-      if (
-  /Android|iPhone|iPad|iPod/i.test(
-    navigator.userAgent
-  )
-) {
+    } else {
 
-  btnSwitchCamera.style.display =
-    'block';
-
-}
-
-
-    } catch (error) {
-
-      console.error(error);
-
-      camaraActiva = false;
-
-      readerContainer.style.display =
+      btnSwitchCamera.style.display =
         'none';
 
-      btnCamera.disabled =
-        false;
-
-      status.textContent =
-        'No se pudo iniciar la cámara.';
-
-      mostrarMensaje(
-
-        'error',
-
-        '❌ No se pudo iniciar la cámara.<br><br>' +
-
-        'Verifique que Chrome tenga permitido ' +
-        'el acceso a la cámara para este sitio.'
-
-      );
-
     }
+
+
+  } catch (error) {
+
+    console.error(
+      'Error al iniciar cámara:',
+      error
+    );
+
+
+    camaraActiva =
+      false;
+
+
+    html5QrCode =
+      null;
+
+
+    readerContainer.style.display =
+      'none';
+
+
+    btnCamera.disabled =
+      false;
+
+
+    btnSwitchCamera.style.display =
+      'none';
+
+
+    status.textContent =
+      'No se pudo iniciar la cámara.';
+
+
+    mostrarMensaje(
+
+      'error',
+
+      '❌ No se pudo iniciar la cámara.<br><br>' +
+
+      'Verifique que Chrome tenga permitido ' +
+      'el acceso a la cámara para este sitio.'
+
+    );
 
   }
 
+}
+
+    /*
+     * ==========================================================
+     * CÁMARA ACTIVADA CORRECTAMENTE
+     * ==========================================================
+     */
+
+    camaraActiva =
+      true;
+
+
+    status.textContent =
+      camaraFrontal
+        ? '🤳 Cámara frontal activa. Apunte al código QR.'
+        : '📷 Cámara trasera activa. Apunte al código QR.';
+
+
+    btnCamera.style.display =
+      'none';
+
+
+    btnStop.style.display =
+      'block';
+
+
+    /*
+     * ==========================================================
+     * MOSTRAR CAMBIAR CÁMARA SOLO EN CELULARES/TABLETS
+     * ==========================================================
+     */
+
+    if (esMovil) {
+
+      btnSwitchCamera.style.display =
+        'block';
+
+    } else {
+
+      btnSwitchCamera.style.display =
+        'none';
+
+    }
+
+
+  } catch (error) {
+
+    console.error(
+      'Error al iniciar cámara:',
+      error
+    );
+
+
+    camaraActiva =
+      false;
+
+
+    html5QrCode =
+      null;
+
+
+    readerContainer.style.display =
+      'none';
+
+
+    btnCamera.disabled =
+      false;
+
+
+    btnSwitchCamera.style.display =
+      'none';
+
+
+    status.textContent =
+      'No se pudo iniciar la cámara.';
+
+
+    mostrarMensaje(
+
+      'error',
+
+      '❌ No se pudo iniciar la cámara.<br><br>' +
+
+      'Verifique que Chrome tenga permitido ' +
+      'el acceso a la cámara para este sitio.'
+
+    );
+
+  }
+
+}
+
+    /*
+     * ==========================================================
+     * CÁMARA ACTIVADA CORRECTAMENTE
+     * ==========================================================
+     */
+
+    camaraActiva =
+      true;
+
+
+    status.textContent =
+      camaraFrontal
+        ? '🤳 Cámara frontal activa. Apunte al código QR.'
+        : '📷 Cámara trasera activa. Apunte al código QR.';
+
+
+    btnCamera.style.display =
+      'none';
+
+
+    btnStop.style.display =
+      'block';
+
+
+    /*
+     * ==========================================================
+     * MOSTRAR CAMBIAR CÁMARA SOLO EN CELULARES/TABLETS
+     * ==========================================================
+     */
+
+    if (esMovil) {
+
+      btnSwitchCamera.style.display =
+        'block';
+
+    } else {
+
+      btnSwitchCamera.style.display =
+        'none';
+
+    }
+
+
+  } catch (error) {
+
+    console.error(
+      'Error al iniciar cámara:',
+      error
+    );
+
+
+    camaraActiva =
+      false;
+
+
+    html5QrCode =
+      null;
+
+
+    readerContainer.style.display =
+      'none';
+
+
+    btnCamera.disabled =
+      false;
+
+
+    btnSwitchCamera.style.display =
+      'none';
+
+
+    status.textContent =
+      'No se pudo iniciar la cámara.';
+
+
+    mostrarMensaje(
+
+      'error',
+
+      '❌ No se pudo iniciar la cámara.<br><br>' +
+
+      'Verifique que Chrome tenga permitido ' +
+      'el acceso a la cámara para este sitio.'
+
+    );
+
+  }
+
+}
 
   /* =====================================================
      DETENER CÁMARA
