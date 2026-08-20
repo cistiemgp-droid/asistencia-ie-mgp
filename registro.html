@@ -480,8 +480,11 @@
       await html5QrCode.start(
 
         {
-          facingMode: 'environment'
-        },
+  facingMode:
+    camaraFrontal
+      ? 'user'
+      : 'environment'
+},
 
         {
           fps: 10,
