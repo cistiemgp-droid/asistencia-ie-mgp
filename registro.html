@@ -844,6 +844,155 @@
 
 }
 
+async function cambiarCamara() {
+
+  /*
+   * ==========================================================
+   * EVITAR CAMBIO SI LA CÁMARA NO ESTÁ ACTIVA
+   * ==========================================================
+   */
+
+  if (!camaraActiva) {
+    return;
+  }
+
+
+  const status =
+    document.getElementById(
+      'camera-status'
+    );
+
+
+  const btnSwitchCamera =
+    document.getElementById(
+      'btn-switch-camera'
+    );
+
+
+  try {
+
+    /*
+     * Evitar que el usuario pulse
+     * varias veces durante el cambio.
+     */
+
+    btnSwitchCamera.disabled =
+      true;
+
+
+    status.textContent =
+      '🔄 Cambiando cámara...';
+
+
+    /*
+     * ========================================================
+     * DETENER CÁMARA ACTUAL
+     * ========================================================
+     */
+
+    if (html5QrCode) {
+
+      try {
+
+        await html5QrCode.stop();
+
+      } catch (error) {
+
+        console.log(
+          'La cámara ya estaba detenida.'
+        );
+
+      }
+
+
+      try {
+
+        html5QrCode.clear();
+
+      } catch (error) {
+
+        console.log(
+          'No fue necesario limpiar el lector.'
+        );
+
+      }
+
+    }
+
+
+    html5QrCode =
+      null;
+
+
+    camaraActiva =
+      false;
+
+
+    /*
+     * ========================================================
+     * CAMBIAR ESTADO
+     *
+     * false → true  = trasera → frontal
+     * true  → false = frontal → trasera
+     * ========================================================
+     */
+
+    camaraFrontal =
+      !camaraFrontal;
+
+
+    /*
+     * ========================================================
+     * VOLVER A ACTIVAR LA CÁMARA
+     * ========================================================
+     */
+
+    await activarCamara();
+
+
+  } catch (error) {
+
+    console.error(
+      'Error al cambiar cámara:',
+      error
+    );
+
+
+    camaraActiva =
+      false;
+
+
+    btnSwitchCamera.disabled =
+      false;
+
+
+    status.textContent =
+      'No se pudo cambiar la cámara.';
+
+
+    mostrarMensaje(
+
+      'error',
+
+      '❌ No se pudo cambiar la cámara.<br><br>' +
+
+      'Intente nuevamente.'
+
+    );
+
+  }
+
+
+  /*
+   * Reactivar el botón
+   */
+
+  btnSwitchCamera.disabled =
+    false;
+
+}
+
+  
   /* =====================================================
      DETENER CÁMARA
      ===================================================== */
