@@ -554,6 +554,17 @@
       btnStop.style.display =
         'block';
 
+      if (
+  /Android|iPhone|iPad|iPod/i.test(
+    navigator.userAgent
+  )
+) {
+
+  btnSwitchCamera.style.display =
+    'block';
+
+}
+
 
     } catch (error) {
 
