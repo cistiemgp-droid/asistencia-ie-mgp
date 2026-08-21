@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escáner QR - IE MGP</title>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Arial,sans-serif;background:#f1f5f9;display:flex;align-items:center;justify-content:center;padding:15px}.contenedor{width:100%;max-width:550px}.encabezado{background:#0f2f55;color:white;text-align:center;padding:18px;border-radius:12px 12px 0 0}.encabezado h1{font-size:20px;margin:0 0 5px}.encabezado p{font-size:12px;margin:0;opacity:.9}.card{background:white;padding:20px;border-radius:0 0 12px 12px;box-shadow:0 4px 12px rgba(0,0,0,.08)}#estado{text-align:center;font-size:14px;color:#64748b;margin-bottom:12px;line-height:1.5}#reader{width:100%;max-width:500px;margin:0 auto 15px}#reader video{width:100%!important;border-radius:8px}button{width:100%;padding:14px;border:0;border-radius:7px;color:white;font-size:16px;font-weight:bold;cursor:pointer;margin-top:8px}#btn-iniciar{background:#059669}#btn-cerrar{background:#475569}.nota{text-align:center;color:#64748b;font-size:11px;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="contenedor">
+<div class="encabezado"><h1>ESCÁNER QR</h1><p>IE JEC MANUEL GONZALES PRADA</p></div>
+<div class="card">
+<div id="estado">Pulse ACTIVAR CÁMARA para comenzar.</div>
+<div id="reader"></div>
+<button id="btn-iniciar" type="button">📷 ACTIVAR CÁMARA</button>
+<button id="btn-cerrar" type="button">← CERRAR</button>
+<div class="nota">Apunte la cámara al código QR del estudiante o personal.</div>
+</div></div>
+<script>
+let lectorQR=null,escaneando=false,enviado=false;
+const estado=document.getElementById('estado');
+const btnIniciar=document.getElementById('btn-iniciar');
+const btnCerrar=document.getElementById('btn-cerrar');
+
+async function iniciarScanner(){
+ if(escaneando||enviado)return;
+ estado.textContent='Solicitando acceso a la cámara...';
+ btnIniciar.disabled=true;
+ try{
+  lectorQR=new Html5Qrcode('reader');
+  await lectorQR.start({facingMode:'environment'},
+   {fps:10,qrbox:function(w,h){const size=Math.floor(Math.min(w,h)*.70);return{width:size,height:size};},aspectRatio:1.0},
+   function(decodedText){recibirQR(decodedText);},
+   function(){}
+  );
+  escaneando=true;
+  estado.textContent='📷 Cámara activa. Apunte al código QR.';
+  btnIniciar.style.display='none';
+ }catch(error){
+  console.error('ERROR REAL DEL ESCÁNER:',error);
+  escaneando=false;btnIniciar.disabled=false;
+  estado.innerHTML='❌ No se pudo iniciar la cámara.<br><br><small>'+(error.name||'Error')+': '+(error.message||error)+'</small>';
+ }
+}
+
+async function recibirQR(decodedText){
+ if(enviado)return;
+ enviado=true;
+ const codigo=String(decodedText||'').trim();
+ if(!codigo){enviado=false;estado.textContent='❌ El código QR está vacío.';return;}
+ estado.textContent='✅ Código leído. Regresando al registro...';
+ try{if(lectorQR&&escaneando){await lectorQR.stop();escaneando=false;}}catch(e){console.warn(e)}
+ try{if(lectorQR)await lectorQR.clear();}catch(e){console.warn(e)}
+ if(window.opener&&!window.opener.closed){
+  window.opener.postMessage({tipo:'QR_ASISTENCIA',codigo:codigo},'*');
+  setTimeout(function(){window.close();},300);
+ }else{
+  enviado=false;
+  estado.innerHTML='❌ No se encontró la ventana de Registro.<br>Abra el escáner desde ACTIVAR CÁMARA.';
+ }
+}
+
+async function cerrarScanner(){
+ try{if(lectorQR&&escaneando){await lectorQR.stop();escaneando=false;}}catch(e){}
+ try{if(lectorQR)await lectorQR.clear();}catch(e){}
+ if(window.opener&&!window.opener.closed)window.close();else history.back();
+}
+btnIniciar.addEventListener('click',iniciarScanner);
+btnCerrar.addEventListener('click',cerrarScanner);
+</script>
+</body>
+</html>
